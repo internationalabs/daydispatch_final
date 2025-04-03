@@ -1766,26 +1766,26 @@
                                                 </td>
                                                 <td>
                                                     <span style="font-size: x-large; "><a class="locations-color"
-                                                            href="{{ route('View.Profile', $List->all_listing->deliver->delivered_user->id) }}"
-                                                            target="_blank"><strong>{{ $List->all_listing->deliver->delivered_user->Company_Name }}</strong></a></span>
+                                                            href="{{ route('View.Profile', $List->all_listing->deliver->waiting_users->id) }}"
+                                                            target="_blank"><strong>{{ $List->all_listing->deliver->waiting_users->Company_Name }}</strong></a></span>
                                                     <br>
                                                     <span>
                                                         <strong>Contact:</strong>
                                                         <a  class="locations-color"
-                                                            href="tel:{{ $List->all_listing->deliver->delivered_user->Contact_Phone }}">
-                                                            {{ $List->all_listing->deliver->delivered_user->Contact_Phone }}
+                                                            href="tel:{{ $List->all_listing->deliver->waiting_users->Contact_Phone }}">
+                                                            {{ $List->all_listing->deliver->waiting_users->Contact_Phone }}
                                                         </a>
                                                     </span><br>
                                                     <span>
                                                         <strong>Email:</strong>
                                                         <a  class="locations-color"
-                                                            href="mailto:{{ $List->all_listing->deliver->delivered_user->email }}">
-                                                            {{ $List->all_listing->deliver->delivered_user->email }}
+                                                            href="mailto:{{ $List->all_listing->deliver->waiting_users->email }}">
+                                                            {{ $List->all_listing->deliver->waiting_users->email }}
                                                         </a>
                                                     </span>
                                                     <br>
                                                     <strong>Time:</strong>
-                                                    {{ $List->all_listing->deliver->delivered_user->Hours_Operations }}
+                                                    {{ $List->all_listing->deliver->waiting_users->Hours_Operations }}
                                                     </span><br>
                                                     @php
                                                         if (!function_exists('getUserRating')) {
@@ -1804,7 +1804,7 @@
                                                             }
                                                         }
                                                         $userRatings = getUserRating(
-                                                            $List->all_listing->deliver->delivered_user->id,
+                                                            $List->all_listing->deliver->waiting_users->id,
                                                         );
                                                         $ratings = $userRatings['ratings'];
                                                         $ratingsCount = $userRatings['count'];
@@ -2043,9 +2043,9 @@
                                                                 <input hidden type="text" class="Listed-ID"
                                                                     value="{{ $List->all_listing->id }}">
                                                                 <input hidden type="text" class="Profile-ID"
-                                                                    value="{{ $List->all_listing->deliver->delivered_user->id }}">
+                                                                    value="{{ $List->all_listing->deliver->waiting_users->id }}">
                                                                 <input hidden type="text" class="Company-Name"
-                                                                    value="{{ $List->all_listing->deliver->delivered_user->Company_Name }}">
+                                                                    value="{{ $List->all_listing->deliver->waiting_users->Company_Name }}">
                                                                 Rate Order
                                                             </a>
                                                         @else
@@ -2436,10 +2436,10 @@
         </div>
     </div> --}}
 <script>
-    $('.advance-6').DataTable({
-        "deferRender": true,
-        "searching": false,
-    });
+    // $('.advance-6').DataTable({
+    //     "deferRender": true,
+    //     "searching": false,
+    // });
 
     // $(document).ready(function() {
     //     $("#comments").hide();

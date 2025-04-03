@@ -456,10 +456,10 @@
                                         Decline Request</a>
                                     <a class="btn btn-outline-primary mb-2 w-100 d-block text-nowrap"
                                         href="#">Request
-                                        changes S</a>
+                                        changes</a>
                                     <a class="btn btn-outline-primary mb-2 w-100 d-block text-nowrap"
                                         href="#">View Load
-                                        Details S</a>
+                                        Details</a>
                                     <a class="btn btn-outline-primary mb-2 w-100 d-block text-nowrap"
                                         data-toggle="modal" data-target="#CompareListing" href="javascript:void(0);">
                                         <input hidden type="text" class="Listed-ID"
@@ -477,7 +477,6 @@
                                             href="{{ route('User.Listing.Archive', ['List_ID' => $List->all_listing->id]) }}">Archive
                                             Order</a>
                                     @endif
-                                    {{-- </div> --}}
                                     {{-- </div> --}}
                                 </td>
                             </tr>

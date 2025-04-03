@@ -13,6 +13,7 @@ use App\Models\Listing\PickupOrders;
 use App\Models\Listing\DeliverApprovals;
 use App\Models\Listing\DeliverdOrders;
 use App\Models\Listing\CancelledOrders;
+use App\Models\Listing\ListingStatusUpdateHistory;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\SidebarOption;
@@ -29,7 +30,7 @@ class GlobalSearchController extends Controller
         $searchQuery = $request->input('search_query');
         $limit = $request->input('limit', 20);
         $slot = '';
-        $checkType = $auth_user->usr_type === 'Carrier' ? 'CMP_id' : 'user_id';
+        $checkType = $auth_user->usr_type === 'Carrier' ? 'cmp_id' : 'user_id';
         $commonConditions = $auth_user->usr_type;
 
         $criteria = $request->input('search_criteria');
@@ -38,11 +39,11 @@ class GlobalSearchController extends Controller
         $orderIds = [];
 
         // CompletedOrders
-        $completed = CompletedOrders::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        $completed = ListingStatusUpdateHistory::where($checkType, $auth_id)->where('status', 'Completed')->withTrashed()->pluck('list_id')->toArray();
         $orderIds = array_merge($orderIds, $completed);
 
         // Dispatch
-        $dispatched = Dispatch::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        $dispatched = ListingStatusUpdateHistory::where($checkType, $auth_id)->where('status', 'Dispatch')->withTrashed()->pluck('list_id')->toArray();
         $orderIds = array_merge($orderIds, $dispatched);
 
         // RequestBroker
@@ -50,27 +51,27 @@ class GlobalSearchController extends Controller
         $orderIds = array_merge($orderIds, $requested);
 
         // WaitingForApproval
-        $waitingForApproval = WaitingForApproval::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        $waitingForApproval = ListingStatusUpdateHistory::where($checkType, $auth_id)->where('status', 'Waiting Approval')->withTrashed()->pluck('list_id')->toArray();
         $orderIds = array_merge($orderIds, $waitingForApproval);
 
         // PickUpApprovals
-        $pickupApproval = PickUpApprovals::where($checkType, $auth_id)->pluck('order_id')->toArray();
-        $orderIds = array_merge($orderIds, $pickupApproval);
+        // $pickupApproval = PickUpApprovals::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        // $orderIds = array_merge($orderIds, $pickupApproval);
 
         // PickupOrders
-        $pickupOrders = PickupOrders::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        $pickupOrders = ListingStatusUpdateHistory::where($checkType, $auth_id)->where('status', 'Pickup')->withTrashed()->pluck('list_id')->toArray();
         $orderIds = array_merge($orderIds, $pickupOrders);
 
         // DeliverApprovals
-        $deliverApprovalListing = DeliverApprovals::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        // $deliverApprovalListing = DeliverApprovals::where($checkType, $auth_id)->pluck('order_id')->toArray();
         // $orderIds = array_merge($orderIds, $deliverApprovalListing);
 
         // DeliverdOrders
-        $deliverdOrders = DeliverdOrders::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        $deliverdOrders = ListingStatusUpdateHistory::where($checkType, $auth_id)->where('status', 'Delivered')->withTrashed()->pluck('list_id')->toArray();
         $orderIds = array_merge($orderIds, $deliverdOrders);
 
         // CancelledOrders
-        $cancelledOrders = CancelledOrders::where($checkType, $auth_id)->pluck('order_id')->toArray();
+        $cancelledOrders = ListingStatusUpdateHistory::where($checkType, $auth_id)->where('status', 'Cancelled')->withTrashed()->pluck('list_id')->toArray();
         $orderIds = array_merge($orderIds, $cancelledOrders);
 
         $Lisiting = AllUserListing::withTrashed()->has('paymentinfo');
@@ -108,7 +109,7 @@ class GlobalSearchController extends Controller
         if ($commonConditions == 'Carrier') {
             $Lisiting = $Lisiting
                 ->carrierlisting()
-                ->where(function ($query) use ($isNewRequest, $completed, $dispatched, $requested, $waitingForApproval, $pickupApproval, $pickupOrders, $deliverApprovalListing, $deliverdOrders, $cancelledOrders, $auth_id) {
+                ->where(function ($query) use ($isNewRequest, $completed, $dispatched, $requested, $waitingForApproval, $pickupOrders, $deliverdOrders, $cancelledOrders, $auth_id) {
                     if ($isNewRequest && $isNewRequest != null) {
                         $query->where('Listing_Status', 'Listed')
                             ->where('Private_Listing', 0)
@@ -118,9 +119,9 @@ class GlobalSearchController extends Controller
                             ->orWhereIn('id', $dispatched)
                             ->orWhereIn('id', $requested)
                             ->orWhereIn('id', $waitingForApproval)
-                            ->orWhereIn('id', $pickupApproval)
+                            // ->orWhereIn('id', $pickupApproval)
                             ->orWhereIn('id', $pickupOrders)
-                            ->orWhereIn('id', $deliverApprovalListing)
+                            // ->orWhereIn('id', $deliverApprovalListing)
                             ->orWhereIn('id', $deliverdOrders)
                             ->orWhereIn('id', $cancelledOrders)
                             ->orWhere('user_id', $auth_id)
@@ -162,7 +163,7 @@ class GlobalSearchController extends Controller
                 ->get();
         } else {
             $Lisiting = $Lisiting
-                ->where(function ($query) use ($isNewRequest, $completed, $dispatched, $requested, $waitingForApproval, $pickupApproval, $pickupOrders, $deliverApprovalListing, $deliverdOrders, $cancelledOrders, $auth_id) {
+                ->where(function ($query) use ($isNewRequest, $completed, $dispatched, $requested, $waitingForApproval, $pickupOrders, $deliverdOrders, $cancelledOrders, $auth_id) {
                     if ($isNewRequest && $isNewRequest !== null) {
                         $query->where('created_at', '>=', Carbon::now()->subHours(12))
                             ->whereHas('authorized_user', function ($q) use ($auth_id) {
@@ -174,9 +175,9 @@ class GlobalSearchController extends Controller
                             ->orWhereIn('id', $dispatched)
                             ->orWhereIn('id', $requested)
                             ->orWhereIn('id', $waitingForApproval)
-                            ->orWhereIn('id', $pickupApproval)
+                            // ->orWhereIn('id', $pickupApproval)
                             ->orWhereIn('id', $pickupOrders)
-                            ->orWhereIn('id', $deliverApprovalListing)
+                            // ->orWhereIn('id', $deliverApprovalListing)
                             ->orWhereIn('id', $deliverdOrders)
                             ->orWhereIn('id', $cancelledOrders);
                     }

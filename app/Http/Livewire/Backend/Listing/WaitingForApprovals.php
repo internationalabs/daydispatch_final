@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Listing\{AllUserListing, ListingAgreement, WaitingForApproval, Dispatch};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Throwable;
+use App\Models\Listing\ListingStatusUpdateHistory;
 
 class WaitingForApprovals extends Component
 {
@@ -46,22 +47,22 @@ class WaitingForApprovals extends Component
             if ($request->has('Search_vehicleType') && $request->Search_vehicleType != null) {
                 $Search_vehicleType = $request->Search_vehicleType;
                 if ($request->Search_vehicleType == 'vehicles') {
-                    $Lisiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 1);
                     })->get();
                 } elseif ($request->Search_vehicleType == 'heavy_equipments') {
-                    $Lisiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 2);
                     })->get();
                 } elseif ($request->Search_vehicleType == 'dry_vans') {
-                    $Lisiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 3);
                     })->get();
                 } else {
-                    $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+                    $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
                 }
             } else {
-                $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+                $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
             }
 
             foreach ($Lisiting as $listing) {
@@ -83,16 +84,16 @@ class WaitingForApprovals extends Component
             if ($request->has('Search_vehicleType') && $request->Search_vehicleType != null) {
                 $Search_vehicleType = $request->Search_vehicleType;
                 if ($request->Search_vehicleType == 'vehicles') {
-                    $Lisiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 1);
                     })->get();
                 } elseif ($request->Search_vehicleType == 'heavy_equipments') {
-                    $Lisiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 2);
                     })->get();
 
                 } elseif ($request->Search_vehicleType == 'dry_vans') {
-                    $Lisiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 3);
                     })->get();
 
@@ -249,56 +250,113 @@ class WaitingForApprovals extends Component
 
     public function DispatchingAssignOrder(Request $request, int $user_id, ListingServices $listingServices): RedirectResponse
     {
+            
+        DB::beginTransaction();
+    
         try {
-            // Begin the database transaction
-            DB::beginTransaction();
 
-            $Dispatch = new Dispatch();
-            $ListingAgreement = new ListingAgreement();
+            $listing = AllUserListing::findOrFail($request->Order_ID);
+            $listing->Listing_Status = 'Dispatch';
 
-            $AllUserListing = AllUserListing::where('id', $request->Order_ID)->first();
-            $AllUserListing->Listing_Status = 'Dispatch';
-
-            $RecordUpdate = WaitingForApproval::where('order_id', $request->Order_ID)->first();
-
-            RequestBroker::where('order_id', $request->Order_ID)
-                ->update([
-                    'is_cancel' => 1
-                ]);
-
-            $Dispatch->user_id = $RecordUpdate->user_id;
-            $Dispatch->order_id = $request->Order_ID;
-            $Dispatch->CMP_id = $RecordUpdate->CMP_id;
-
-            $ListingAgreement->Agreement_Name = $request->Agreement_Name;
-            $ListingAgreement->Agreement_Signature = $request->Agreement_Sign;
-            $ListingAgreement->Sign = $request->signatureShw;
-            $ListingAgreement->user_id = $request->CMP_ID;
-            $ListingAgreement->order_id = $request->Order_ID;
-            $ListingAgreement->CMP_id = $user_id;
-
-            if ($AllUserListing->update() && $ListingAgreement->save()) {
-                $listingServices->OrderHistory('Dispatch', null, null, $request->Order_ID, $RecordUpdate->user_id, $RecordUpdate->CMP_id);
-                if ($Dispatch->save() && $RecordUpdate->delete()) {
-                    $flag = DayDispatchHelper::SendNotificationOnStatusChanged('Dispatch', $request->Order_ID);
-                    if ($flag) {
-                        DB::commit();
-                        return redirect()->route('Dispatch.Listing')->with('success', "Your Listing has been Dispatched Successfully!");
-                    }
-                    DB::rollBack();
-                    return back()->with('error', "Something went Wrong with Notifications!");
-                }
-                DB::rollBack();
-                return back()->with('error', "Your Listing hasn't Waiting's!");
+            $statusUpdateHistory = ListingStatusUpdateHistory::where('list_id', $request->Order_ID)->where('status', 'Waiting Approval')->firstOrFail();
+    
+            RequestBroker::where('order_id', $request->Order_ID)->update(['is_cancel' => 1]);
+    
+            $dispatch = new ListingStatusUpdateHistory();
+            $dispatch->user_id = $statusUpdateHistory->user_id;
+            $dispatch->list_id = $request->Order_ID;
+            $dispatch->cmp_id = $statusUpdateHistory->cmp_id;
+            $dispatch->status_by = $statusUpdateHistory->user_id;
+            $dispatch->status = 'Dispatch';
+    
+            $listingAgreement = new ListingAgreement();
+            $listingAgreement->Agreement_Name = $request->Agreement_Name;
+            $listingAgreement->Agreement_Signature = $request->Agreement_Sign;
+            $listingAgreement->Sign = $request->signatureShw;
+            $listingAgreement->user_id = $request->CMP_ID;
+            $listingAgreement->order_id = $request->Order_ID;
+            $listingAgreement->CMP_id = $user_id;
+    
+            if (!$listing->update() || !$listingAgreement->save()) {
+                throw new \Exception("Failed to update listing or save agreement.");
             }
+    
+            // $listingServices->OrderHistory('Dispatch', null, null, $request->Order_ID, $statusUpdateHistory->user_id, $statusUpdateHistory->cmp_id);
+            
+            if (!$dispatch->save() || !$statusUpdateHistory->delete()) {
+                throw new \Exception("Failed to save dispatch record or delete status update history.");
+            }
+    
+            $notificationSent = DayDispatchHelper::SendNotificationOnStatusChanged('Dispatch', $request->Order_ID);
+            if (!$notificationSent) {
+                throw new \Exception("Failed to send notification.");
+            }
+    
+            DB::commit();
+    
+            return redirect()->route('Dispatch.Listing')->with('success', "Your listing has been dispatched successfully!");
+    
+        } catch (\Exception $e) {
+
             DB::rollBack();
-            return back()->with('error', "Listing not Updated!");
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error($e->getMessage());
+            Log::error("Error in Dispatching Assign Order: " . $e->getMessage());
             return back()->with('error', "An error occurred. Please try again later.");
+
         }
     }
+
+    // public function DispatchingAssignOrder2(Request $request, int $user_id, ListingServices $listingServices): RedirectResponse
+    // {
+    //     try {
+    //         // Begin the database transaction
+    //         DB::beginTransaction();
+
+    //         $Dispatch = new Dispatch();
+    //         $ListingAgreement = new ListingAgreement();
+
+    //         $AllUserListing = AllUserListing::where('id', $request->Order_ID)->first();
+    //         $AllUserListing->Listing_Status = 'Dispatch';
+
+    //         $RecordUpdate = WaitingForApproval::where('order_id', $request->Order_ID)->first();
+
+    //         RequestBroker::where('order_id', $request->Order_ID)
+    //             ->update([
+    //                 'is_cancel' => 1
+    //             ]);
+
+    //         $Dispatch->user_id = $RecordUpdate->user_id;
+    //         $Dispatch->order_id = $request->Order_ID;
+    //         $Dispatch->CMP_id = $RecordUpdate->CMP_id;
+
+    //         $ListingAgreement->Agreement_Name = $request->Agreement_Name;
+    //         $ListingAgreement->Agreement_Signature = $request->Agreement_Sign;
+    //         $ListingAgreement->Sign = $request->signatureShw;
+    //         $ListingAgreement->user_id = $request->CMP_ID;
+    //         $ListingAgreement->order_id = $request->Order_ID;
+    //         $ListingAgreement->CMP_id = $user_id;
+
+    //         if ($AllUserListing->update() && $ListingAgreement->save()) {
+    //             $listingServices->OrderHistory('Dispatch', null, null, $request->Order_ID, $RecordUpdate->user_id, $RecordUpdate->CMP_id);
+    //             if ($Dispatch->save() && $RecordUpdate->delete()) {
+    //                 $flag = DayDispatchHelper::SendNotificationOnStatusChanged('Dispatch', $request->Order_ID);
+    //                 if ($flag) {
+    //                     DB::commit();
+    //                     return redirect()->route('Dispatch.Listing')->with('success', "Your Listing has been Dispatched Successfully!");
+    //                 }
+    //                 DB::rollBack();
+    //                 return back()->with('error', "Something went Wrong with Notifications!");
+    //             }
+    //             DB::rollBack();
+    //             return back()->with('error', "Your Listing hasn't Waiting's!");
+    //         }
+    //         DB::rollBack();
+    //         return back()->with('error', "Listing not Updated!");
+    //     } catch (Exception $e) {
+    //         DB::rollBack();
+    //         Log::error($e->getMessage());
+    //         return back()->with('error', "An error occurred. Please try again later.");
+    //     }
+    // }
 
 
 }

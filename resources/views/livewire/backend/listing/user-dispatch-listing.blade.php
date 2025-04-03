@@ -483,7 +483,7 @@
                                                             <input hidden type="text" class="User-ID"
                                                                 value="{{ $List->all_listing->user_id }}">
                                                             <input hidden type="text" class="CMP-ID"
-                                                                value="{{ $List->all_listing->dispatch_listing->dispatch_user->id }}">
+                                                                value="{{ $List->all_listing->dispatch_listing->waiting_users->id }}">
                                                             <input hidden type="text" class="Order-Status"
                                                                 value="{{ $List->all_listing->Listing_Status }}">
                                                             Cancel Order</a>
@@ -572,7 +572,7 @@
                                             <input hidden type="text" class="User-ID"
                                                 value="{{ $List->all_listing->user_id }}">
                                             <input hidden type="text" class="CMP-ID"
-                                                value="{{ $List->all_listing->dispatch_listing->dispatch_user->id }}">
+                                                value="{{ $List->all_listing->dispatch_listing->waiting_users->id }}">
                                             <input hidden type="text" class="Order-Status"
                                                 value="{{ $List->all_listing->Listing_Status }}">Cancel
                                             Dispatch</button>
@@ -718,38 +718,38 @@
                                     </td>
                                     <td>
                                         @php
-                                            $companyName = $List->all_listing->dispatch_listing->dispatch_user->Company_Name;
+                                            $companyName = $List->all_listing->dispatch_listing->waiting_users->Company_Name;
                                             $trimmedCompanyName = Str::words($companyName, 3, '...');
                                         @endphp
 
                                         <span style="font-size: x-large;">
                                             <a target="_blank" class="locations-color"
-                                                href="{{ route('View.Profile', $List->all_listing->dispatch_listing->dispatch_user->id) }}"
+                                                href="{{ route('View.Profile', $List->all_listing->dispatch_listing->waiting_users->id) }}"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title="{{ $companyName }}">
                                                 <strong>{{ $trimmedCompanyName }}</strong>
                                             </a>
                                         </span><br>
                                         {{-- <span style="font-size: x-large; "><a target="_blank" class="locations-color"
-                                                href="{{ route('View.Profile', $List->all_listing->dispatch_listing->dispatch_user->id) }}"><strong>{{ $List->all_listing->dispatch_listing->dispatch_user->Company_Name }}</strong></a>
+                                                href="{{ route('View.Profile', $List->all_listing->dispatch_listing->waiting_users->id) }}"><strong>{{ $List->all_listing->dispatch_listing->waiting_users->Company_Name }}</strong></a>
                                         </span><br> --}}
                                         <span>
                                             <strong>Contact:</strong>
                                             <a class="locations-color"
-                                                href="tel:{{ $List->all_listing->dispatch_listing->dispatch_user->Contact_Phone }}">
-                                                {{ $List->all_listing->dispatch_listing->dispatch_user->Contact_Phone }}
+                                                href="tel:{{ $List->all_listing->dispatch_listing->waiting_users->Contact_Phone }}">
+                                                {{ $List->all_listing->dispatch_listing->waiting_users->Contact_Phone }}
                                             </a>
                                         </span><br>
                                         <span>
                                             <strong>Email:</strong>
                                             <a class="locations-color"
-                                                href="mailto:{{ $List->all_listing->dispatch_listing->dispatch_user->email }}">
-                                                {{ $List->all_listing->dispatch_listing->dispatch_user->email }}
+                                                href="mailto:{{ $List->all_listing->dispatch_listing->waiting_users->email }}">
+                                                {{ $List->all_listing->dispatch_listing->waiting_users->email }}
                                             </a>
                                         </span><br>
-                                        {{-- Contact:{{ $List->all_listing->dispatch_listing->dispatch_user->Contact_Phone }}<br>
-                                        Email:{{ $List->all_listing->dispatch_listing->dispatch_user->email }}<br> --}}
-                                        Time:{{ $List->all_listing->dispatch_listing->dispatch_user->Hours_Operations }}<br>
+                                        {{-- Contact:{{ $List->all_listing->dispatch_listing->waiting_users->Contact_Phone }}<br>
+                                        Email:{{ $List->all_listing->dispatch_listing->waiting_users->email }}<br> --}}
+                                        Time:{{ $List->all_listing->dispatch_listing->waiting_users->Hours_Operations }}<br>
                                         @php
                                             if (!function_exists('getUserRating')) {
                                                 function getUserRating($userId)
@@ -768,7 +768,7 @@
                                             }
 
                                             $userRatings = getUserRating(
-                                                $List->all_listing->dispatch_listing->dispatch_user->id,
+                                                $List->all_listing->dispatch_listing->waiting_users->id,
                                             );
                                             $ratings = $userRatings['ratings'];
                                             $ratingsCount = $userRatings['count'];
@@ -998,13 +998,13 @@
                                         {{-- <span class="text-nowrap"><strong>Price to Pay: </strong>${{ $List->all_listing->paymentinfo->Price_Pay_Carrier }}</span>
                                         <br> --}}
                                         {{-- <strong>Assigned to:
-                                        </strong>{{ $List->all_listing->dispatch_listing->dispatch_user->usr_type }}
+                                        </strong>{{ $List->all_listing->dispatch_listing->waiting_users->usr_type }}
                                         <br> --}}
                                         {{-- <strong><a
-                                            href="{{ route('View.Profile', $List->all_listing->dispatch_listing->dispatch_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->dispatch_listing->waiting_users->id) }}"
                                             target="_blank">View
                                             MC</a>&nbsp;&nbsp;<a
-                                            href="{{ route('View.Profile', $List->all_listing->dispatch_listing->dispatch_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->dispatch_listing->waiting_users->id) }}"
                                             target="_blank">View DOT</a></strong> --}}
 
                                         {{-- @if (!empty($List->all_listing->request_broker->Offer_Price) && $List->all_listing->request_broker->Offer_Price !== 0)
@@ -1073,7 +1073,7 @@
                                                         <input hidden type="text" class="User-ID"
                                                             value="{{ $List->all_listing->user_id }}">
                                                         <input hidden type="text" class="CMP-ID"
-                                                            value="{{ $List->all_listing->dispatch_listing->dispatch_user->id }}">
+                                                            value="{{ $List->all_listing->dispatch_listing->waiting_users->id }}">
                                                         <input hidden type="text" class="Order-Status"
                                                             value="{{ $List->all_listing->Listing_Status }}">
                                                         Cancel Order</a>
@@ -1152,7 +1152,7 @@
                                             <input hidden type="text" class="User-ID"
                                                 value="{{ $List->all_listing->user_id }}">
                                             <input hidden type="text" class="CMP-ID"
-                                                value="{{ $List->all_listing->dispatch_listing->dispatch_user->id }}">
+                                                value="{{ $List->all_listing->dispatch_listing->waiting_users->id }}">
                                             <input hidden type="text" class="Order-Status"
                                                 value="{{ $List->all_listing->Listing_Status }}">
                                             Cancel Listing

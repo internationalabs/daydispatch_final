@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Listing\AllUserListing;
 use App\Models\Listing\ArchiveListing;
 use App\Models\Listing\DeliverdOrders;
+use App\Models\Listing\ListingStatusUpdateHistory;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class DeliverdListing extends Component
@@ -37,7 +38,7 @@ class DeliverdListing extends Component
         $auth_user = Auth::guard('Authorized')->user();
         $Lisiting = $this->listingServices->getDeliveredOrders();
         if ($auth_user->usr_type === 'Carrier') {
-            $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+            $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
         } else {
             $Lisiting = $Lisiting->where('user_id', $auth_user->id);
         }
@@ -56,30 +57,37 @@ class DeliverdListing extends Component
         // try {
         //     DB::beginTransaction();
 
-           $auth_user = Auth::guard('Authorized')->user();
+            $auth_user = Auth::guard('Authorized')->user();
             $existingOnlineBol = PickupOnlineBol::where('order_id', $request->List_ID)->with('pickup_online_bol_imgs', 'pickup_online_bol_items')->first();
             if (empty($existingOnlineBol) && $auth_user->usr_type === 'Carrier') {
                 return redirect()->route('PostPickup.Bol.Listing',[$request->List_ID]);
             }
 
-            $DeliverdOrders = new DeliverdOrders();
+            // $DeliverdOrders = new DeliverdOrders();
+            $DeliverdOrders = new ListingStatusUpdateHistory();
 
             $AllUserListing = AllUserListing::where('id', $request->List_ID)->first();
             $AllUserListing->Listing_Status = 'Delivered';
 
             // $RecordUpdate = DeliverApprovals::where('order_id', $request->List_ID)->first();
-            $RecordUpdate = PickupOrders::withTrashed()->where('order_id', $request->List_ID)->first();
-
+            // $RecordUpdate = PickupOrders::withTrashed()->where('order_id', $request->List_ID)->first();
+            $RecordUpdate = ListingStatusUpdateHistory::where('status', 'Pickup')->where('list_id', $request->List_ID)->first();
 
             $DeliverdOrders->user_id = $RecordUpdate->user_id;
-            $DeliverdOrders->order_id = $request->List_ID;
-            $DeliverdOrders->CMP_id = $RecordUpdate->CMP_id;
+            $DeliverdOrders->list_id = $request->List_ID;
+            $DeliverdOrders->cmp_id = $RecordUpdate->cmp_id;
+            $DeliverdOrders->status_by = Auth::guard('Authorized')->user()->id;
+            $DeliverdOrders->status = 'Delivered';
+
+            // $DeliverdOrders->user_id = $RecordUpdate->user_id;
+            // $DeliverdOrders->order_id = $request->List_ID;
+            // $DeliverdOrders->CMP_id = $RecordUpdate->CMP_id;
 
             $auth_user = AuthorizedUsers::where('id', $RecordUpdate->user_id)->first();
             $this->AgentReward($auth_user->ref_code, $request->List_ID);
 
             if ($AllUserListing->update() && $DeliverdOrders->save()) {
-                $listingServices->OrderHistory('Delivered', null, null, $request->List_ID, $RecordUpdate->user_id, $RecordUpdate->CMP_id);
+                // $listingServices->OrderHistory('Delivered', null, null, $request->List_ID, $RecordUpdate->user_id, $RecordUpdate->CMP_id);
                 if ($RecordUpdate->delete()) {
                     $flag = DayDispatchHelper::SendNotificationOnStatusChanged('Delivered', $request->List_ID);
                     if ($flag) {

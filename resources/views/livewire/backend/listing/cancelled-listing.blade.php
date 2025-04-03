@@ -96,11 +96,11 @@
                                     @if ($List->deleted_at !== null)
                                         <h6><span class="badge badge-primary mb-2">Re Listed</span>
                                             <span
-                                                class="badge badge-primary">{{ !is_null($List->all_listing->cancel->cancelled_by) ? $List->all_listing->cancel->cancelled_by->Company_Name : '' }}</span>
+                                                class="badge badge-primary">{{ !is_null($List->cancelled_By) ? $List->cancelled_By->Company_Name : '' }}</span>
                                         </h6>
                                     @else
-                                        <h6><span class="badge badge-primary">{{ $List->all_listing->Listing_Status }}
-                                                by {{ $List->all_listing->cancel->cancelled_By->Company_Name }}</span>
+                                        <h6><span class="badge badge-primary">{{ $List->status }}
+                                                by {{ $List->cancelled_By->Company_Name }}</span>
                                         </h6>
                                     @endif
                                     <span
@@ -503,15 +503,15 @@
                                                     Re Listed
                                                 </span>
                                                 <span class="badge badge-primary">
-                                                    {{ !is_null($List->all_listing->cancel->cancelled_by) ? $List->all_listing->cancel->cancelled_by->Company_Name : '' }}
+                                                    {{ !is_null($List->all_listing->cancel->waiting_users) ? $List->all_listing->cancel->waiting_users->Company_Name : '' }}
                                                 </span>
                                                 <span class="badge badge-primary">
-                                                    Cancelled by {{ $List->all_listing->cancel->cancel_user->Company_Name }}
+                                                    Cancelled by {{ $List->all_listing->cancel->waiting_users->Company_Name }}
                                                 </span>
                                             </h6>
                                             @else --}}
                                     {{-- <h6><span
-                                                class="badge badge-primary">{{ $List->all_listing->Listing_Status }} by {{ $List->all_listing->cancel->cancelled_By->Company_Name }}</span>
+                                                class="badge badge-primary">{{ $List->status }} by {{ $List->all_listing->cancel->waiting_users->Company_Name }}</span>
                                             </h6> --}}
                                     {{-- <a class="btn btn-outline-primary mb-2 w-100 d-block"
                                                 href="https://www.google.com/maps/dir/{{ $List->all_listing->routes->Origin_ZipCode }},+USA/{{ $List->all_listing->routes->Dest_ZipCode }},+USA/"
@@ -539,11 +539,11 @@
                                         <input hidden type="text" class="User-Name"
                                             value="{{ $List->all_listing->authorized_user->Company_Name }}">
                                         <input hidden type="text" class="CMP-ID"
-                                            value="{{ $List->all_listing->cancel->cancel_user->id }}">
+                                            value="{{ $List->waiting_users->id }}">
                                         <input hidden type="text" class="CMP-Email"
-                                            value="{{ $List->all_listing->cancel->cancel_user->email }}">
+                                            value="{{ $List->waiting_users->email }}">
                                         <input hidden type="text" class="CMP-Name"
-                                            value="{{ $List->all_listing->cancel->cancel_user->Company_Name }}">
+                                            value="{{ $List->waiting_users->Company_Name }}">
                                         Generate Ticket</a>
                                     {{-- </div>
                                             </div>
@@ -593,11 +593,11 @@
                                 <td>
                                     @if ($List->deleted_at !== null)
                                         <h6><span class="badge badge-primary mb-2">Re Listed</span><br><span
-                                                class="badge badge-warning">{{ !is_null($List->all_listing->cancel->cancelled_by) ? $List->all_listing->cancel->cancelled_by->Company_Name : '' }}</span>
+                                                class="badge badge-warning">{{ !is_null($List->all_listing->cancel->waiting_users) ? $List->all_listing->cancel->waiting_users->Company_Name : '' }}</span>
                                         </h6>
                                     @else
-                                        <h6><span class="badge badge-warning">{{ $List->all_listing->Listing_Status }}
-                                                by {{ $List->all_listing->cancel->cancelled_By->Company_Name }}</span>
+                                        <h6><span class="badge badge-warning">{{ $List->status }}
+                                                by {{ $List->cancelled_By->Company_Name }}</span>
                                         </h6>
                                     @endif
                                     <span
@@ -615,14 +615,14 @@
                                 <td>
 
                                     @php
-                                        $companyName = $List->all_listing->cancel->cancel_user->Company_Name;
+                                        $companyName = $List->all_listing->cancel->waiting_users->Company_Name;
                                         $trimmedCompanyName = Str::words($companyName, 3, '...');
                                     @endphp
 
                                     <strong>
                                         <span style="font-size: x-large;">
                                             <a class="fs-3 text-wrap locations-color"
-                                                href="{{ route('View.Profile', $List->all_listing->cancel->cancel_user->id) }}"
+                                                href="{{ route('View.Profile', $List->all_listing->cancel->waiting_users->id) }}"
                                                 target="_blank" data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title="{{ $companyName }}">
                                                 {{ $trimmedCompanyName }}
@@ -632,33 +632,33 @@
 
                                     {{-- <strong>
                                             <span style="font-size: x-large; "><a class="fs-3 text-wrap locations-color"
-                                                    href="{{ route('View.Profile', $List->all_listing->cancel->cancel_user->id) }}"
-                                                    target="_blank">{{ $List->all_listing->cancel->cancel_user->Company_Name }}</a>
+                                                    href="{{ route('View.Profile', $List->all_listing->cancel->waiting_users->id) }}"
+                                                    target="_blank">{{ $List->all_listing->cancel->waiting_users->Company_Name }}</a>
                                             </span>
                                         </strong><br> --}}
                                     {{-- <strong><a target="_blank"
-                                                href="{{ route('View.Profile', $List->all_listing->cancel->cancel_user->id) }}">{{ $List->all_listing->cancel->cancel_user->Company_Name }}</a></strong><br> --}}
+                                                href="{{ route('View.Profile', $List->all_listing->cancel->waiting_users->id) }}">{{ $List->all_listing->cancel->waiting_users->Company_Name }}</a></strong><br> --}}
                                     <span>
                                         <strong>Contact:</strong>
                                         <a class="locations-color"
-                                            href="tel:{{ $List->all_listing->cancel->cancel_user->Contact_Phone }}">
-                                            {{ $List->all_listing->cancel->cancel_user->Contact_Phone }}
+                                            href="tel:{{ $List->all_listing->cancel->waiting_users->Contact_Phone }}">
+                                            {{ $List->all_listing->cancel->waiting_users->Contact_Phone }}
                                         </a>
                                     </span><br>
                                     <span>
                                         <strong>Email:</strong>
                                         <a class="locations-color"
-                                            href="mailto:{{ $List->all_listing->cancel->cancel_user->email }}">
-                                            {{ $List->all_listing->cancel->cancel_user->email }}
+                                            href="mailto:{{ $List->all_listing->cancel->waiting_users->email }}">
+                                            {{ $List->all_listing->cancel->waiting_users->email }}
                                         </a>
                                     </span><br>
                                     {{-- <span>
-                                            <strong>Contact:</strong>{{ $List->all_listing->cancel->cancel_user->Contact_Phone }}
+                                            <strong>Contact:</strong>{{ $List->all_listing->cancel->waiting_users->Contact_Phone }}
                                         </span><br>
-                                        <strong>Email:</strong>{{ $List->all_listing->cancel->cancel_user->email }}
+                                        <strong>Email:</strong>{{ $List->all_listing->cancel->waiting_users->email }}
                                         </span><br> --}}
                                     {{-- <strong>Time:</strong>
-                                        {{ $List->all_listing->cancel->cancel_user->Hours_Operations }}
+                                        {{ $List->all_listing->cancel->waiting_users->Hours_Operations }}
                                         </span><br> --}}
                                     {{-- <strong><a
                                             href="{{ route('View.Agreement', ['List_ID' => $List->all_listing->id]) }}"
@@ -679,7 +679,7 @@
                                             }
                                         }
 
-                                        $userRatings = getUserRating($List->all_listing->cancel->cancel_user->id);
+                                        $userRatings = getUserRating($List->all_listing->cancel->waiting_users->id);
                                         $ratings = $userRatings['ratings'];
                                         $ratingsCount = $userRatings['count'];
 
@@ -952,13 +952,13 @@
                                 @endif
                                     <strong>Mile:</strong>{{ $List->all_listing->routes->Miles }}miles<br>
                                     {{-- <strong>Assigned to:
-                                        </strong>{{ $List->all_listing->cancel->cancel_user->usr_type }}
+                                        </strong>{{ $List->all_listing->cancel->waiting_users->usr_type }}
                                         <br> --}}
                                     {{-- <strong><a
-                                            href="{{ route('View.Profile', $List->all_listing->cancel->cancel_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->cancel->waiting_users->id) }}"
                                             target="_blank">View
                                             MC</a>&nbsp;&nbsp;<a
-                                            href="{{ route('View.Profile', $List->all_listing->cancel->cancel_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->cancel->waiting_users->id) }}"
                                             target="_blank">View DOT</a></strong> --}}
                                     @if (!empty($List->all_listing->request_broker->Offer_Price) && $List->all_listing->request_broker->Offer_Price !== 0)
                                         <span class="text-danger fs-5 text-nowrap">
@@ -1022,11 +1022,11 @@
                                         <input hidden type="text" class="User-Name"
                                             value="{{ $List->all_listing->authorized_user->Company_Name }}">
                                         <input hidden type="text" class="CMP-ID"
-                                            value="{{ $List->all_listing->cancel->cancel_user->id }}">
+                                            value="{{ $List->waiting_users->id }}">
                                         <input hidden type="text" class="CMP-Email"
-                                            value="{{ $List->all_listing->cancel->cancel_user->email }}">
+                                            value="{{ $List->waiting_users->email }}">
                                         <input hidden type="text" class="CMP-Name"
-                                            value="{{ $List->all_listing->cancel->cancel_user->Company_Name }}">
+                                            value="{{ $List->waiting_users->Company_Name }}">
                                         Generate Ticket</a>
                                     {{-- </div>
                                             </div> --}}

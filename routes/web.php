@@ -190,17 +190,17 @@ use App\Models\SidebarOption;
 */
 
 // ================ Cache Clear Routes
-// Route::get('/clear-cache', static function () {
-//     Artisan::call('cache:clear');
-//     Artisan::call('config:clear');
-//     Artisan::call('config:cache');
-//     Artisan::call('view:clear');
-//     Artisan::call('route:cache');
-//     Artisan::call('route:clear');
-//     Artisan::call('event:clear');
-//     Artisan::call('optimize:clear');
-//     return "Cache is cleared";
-// });
+Route::get('/clear-cache', static function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    Artisan::call('route:cache');
+    Artisan::call('route:clear');
+    Artisan::call('event:clear');
+    Artisan::call('optimize:clear');
+    return "Cache is cleared";
+});
 
 // ===================== Frontend Website Routes ======================
 Route::get('/', Dashboard::class)->name('Frontend.index');

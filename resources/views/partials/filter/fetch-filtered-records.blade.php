@@ -453,9 +453,9 @@
                                         @endif
                                     </span>
                                     <br>
-                                    @if (\App\Models\Carrier\RequestBroker::where('order_id', $List->id)->where('CMP_id', Auth::guard('Authorized')->user()->id)->where('is_cancel', 0)->exists())
-                                        <a class="btn btn-outline-primary mb-2 w-100 d-block request-load text-nowrap"
-                                            href="javascript:void(0);">Already Requested</a>
+                                    @if (\App\Models\Carrier\RequestBroker::where('order_id', $List->id)->where('cmp_id', Auth::guard('Authorized')->user()->id)->where('is_cancel', 0)->exists())
+                                        <button class="btn btn-outline-primary mb-2 w-100 d-block request-load text-nowrap"
+                                            href="javascript:void(0);" disabled>Already Requested</button>
                                     @else
                                         <a onclick="request_load_click({{ $List->id }})"
                                             id="{{ $List->id }}"

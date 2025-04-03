@@ -32,7 +32,7 @@ class PickupListing extends Component
 
         $Lisiting = $this->listingServices->getPickupOrders();
         if ($auth_user->usr_type === 'Carrier') {
-            $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+            $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
         } else {
             $Lisiting = $Lisiting->where('user_id', $auth_user->id);
         }

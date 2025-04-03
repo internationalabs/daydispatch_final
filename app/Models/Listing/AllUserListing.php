@@ -38,7 +38,18 @@ class AllUserListing extends Model
      */
     protected $dates = ['deleted_at', 'updated_at'];
 
-    protected $fillable = ['Listing_Status'];
+    // protected $fillable = ['Listing_Status'];
+    protected $fillable = [
+        'Listing_Status',
+        'Is_archived',
+        'Ref_ID',
+        'Custom_Listing',
+        'Posted_Date',
+        'Listing_Type',
+        'Is_Rate',
+        'user_id',
+        'expire_at'
+    ];
 
     /**
      * @param int $type
@@ -71,7 +82,8 @@ class AllUserListing extends Model
         )
             ->latest('created_at')
             ->where('Listing_Status', 'Listed')
-            ->where('Custom_Listing', 0)
+            ->whereNot('Listing_Status', 'Scheduled')
+            ->whereNot('Custom_Listing', 1)
             ->where('Listing_Type', $type);
 
         // // Check user_id in related tables
@@ -129,7 +141,8 @@ class AllUserListing extends Model
         ])
             ->latest('created_at')
             ->where('Listing_Status', 'Listed')
-            ->where('Custom_Listing', 0)
+            ->whereNot('Listing_Status', 'Scheduled')
+            ->whereNot('Custom_Listing', 1)
             ->where('Listing_Type', $type);
 
         if ($relation === 'heavy_equipments' || $relation === 'dry_vans') {
@@ -153,12 +166,14 @@ class AllUserListing extends Model
     public function scopeActive($query)
     {
         // return $query->where('Listing_Status', 'Listed')->where('Custom_Listing', 0);
-        return $query->where('Listing_Status', 'Listed');
+        // return $query->where('Listing_Status', 'Listed');
+        return $query->whereIn('Listing_Status', ['Listed' , 'Scheduled']);
     }
 
     public function scopeInActive($query)
     {
-        return $query->where('Listing_Status', 'Listed')->where('Custom_Listing', 1);
+        // return $query->where('Listing_Status', 'Listed')->where('Custom_Listing', 1);
+        return $query->where('Listing_Status', 'Scheduled')->where('Custom_Listing', 1);
     }
 
     public function scopeExpired($query)
@@ -395,7 +410,7 @@ class AllUserListing extends Model
      */
     public function dispatch_listing(): HasOne
     {
-        return $this->HasOne(Dispatch::class, 'order_id', 'id')->withTrashed();
+        return $this->HasOne(ListingStatusUpdateHistory::class, 'list_id', 'id')->withTrashed();
     }
 
     public function driver(): HasOne
@@ -410,7 +425,7 @@ class AllUserListing extends Model
      */
     public function waitings(): HasOne
     {
-        return $this->hasOne(WaitingForApproval::class, 'order_id', 'id');
+        return $this->hasOne(ListingStatusUpdateHistory::class, 'list_id', 'id')->withTrashed();
     }
 
     /**
@@ -420,7 +435,7 @@ class AllUserListing extends Model
      */
     public function pickup_approve(): HasOne
     {
-        return $this->hasOne(PickUpApprovals::class, 'order_id', 'id');
+        return $this->hasOne(PickUpApprovals::class, 'order_id', 'id')->withTrashed();
     }
 
     /**
@@ -430,7 +445,7 @@ class AllUserListing extends Model
      */
     public function pickup(): HasOne
     {
-        return $this->hasOne(PickupOrders::class, 'order_id', 'id');
+        return $this->hasOne(ListingStatusUpdateHistory::class, 'list_id', 'id')->withTrashed();
     }
 
     /**
@@ -440,7 +455,7 @@ class AllUserListing extends Model
      */
     public function deliver_approve(): HasOne
     {
-        return $this->hasOne(DeliverApprovals::class, 'order_id', 'id');
+        return $this->hasOne(DeliverApprovals::class, 'order_id', 'id')->withTrashed();
     }
 
     /**
@@ -450,7 +465,7 @@ class AllUserListing extends Model
      */
     public function deliver(): HasOne
     {
-        return $this->hasOne(DeliverdOrders::class, 'order_id', 'id');
+        return $this->hasOne(ListingStatusUpdateHistory::class, 'list_id', 'id')->withTrashed();
     }
 
     /**
@@ -460,7 +475,7 @@ class AllUserListing extends Model
      */
     public function completed(): HasOne
     {
-        return $this->hasOne(CompletedOrders::class, 'order_id', 'id');
+        return $this->hasOne(ListingStatusUpdateHistory::class, 'list_id', 'id')->withTrashed();
     }
 
     /**
@@ -480,7 +495,7 @@ class AllUserListing extends Model
      */
     public function cancel(): HasOne
     {
-        return $this->hasOne(CancelledOrders::class, 'order_id', 'id')->withTrashed();
+        return $this->hasOne(ListingStatusUpdateHistory::class, 'list_id', 'id')->withTrashed();
     }
 
     /**

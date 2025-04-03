@@ -27,6 +27,8 @@ use Illuminate\Support\Str;
 use RuntimeException;
 use App\Mail\NotifyAllUsers;
 use App\Models\Quote\Order;
+use App\Models\Listing\ArchiveListing;
+use App\Models\Listing\ListingStatusUpdateHistory;
 
 class DayDispatchHelper
 {
@@ -316,15 +318,15 @@ class DayDispatchHelper
     private static function prepareRelationships(): array
     {
         return [
-            'Waiting For Approval' => 'all_listing.waitings.waiting_users',
+            'Waiting Approval' => 'all_listing.waitings.waiting_users',
             'Requested' => 'all_listing.request_broker.requested_user',
-            'Dispatch' => 'all_listing.dispatch_listing.dispatch_user',
-            'PickUp Approval' => 'all_listing.pickup_approve.pickup_approval_user',
-            'PickUp' => 'all_listing.pickup.pickup_user',
-            'Deliver Approval' => 'all_listing.deliver_approve.deliver_approval_user',
-            'Delivered' => 'all_listing.deliver.delivered_user',
-            'Completed' => 'all_listing.completed.completed_user',
-            'Cancelled' => 'all_listing.cancel.cancel_user',
+            'Dispatch' => 'all_listing.dispatch_listing.waiting_users',
+            'PickUp Approval' => 'all_listing.pickup_approve.waiting_users',
+            'Pickup' => 'all_listing.pickup.waiting_users',
+            'Deliver Approval' => 'all_listing.deliver_approve.waiting_users',
+            'Delivered' => 'all_listing.deliver.waiting_users',
+            'Completed' => 'all_listing.completed.waiting_users',
+            'Cancelled' => 'all_listing.cancel.waiting_users',
         ];
     }
 
@@ -336,9 +338,10 @@ class DayDispatchHelper
             return false;
         }
 
-        if ($status === 'Waiting For Approval') {
-            $Listing = WaitingForApproval::with($relationships[$status])
-                ->where('order_id', $listID)
+        if ($status === 'Waiting Approval') {
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Waiting Approval')
                 ->first();
 
             if (!$Listing) {
@@ -370,33 +373,35 @@ class DayDispatchHelper
         }
 
         if ($status === 'Dispatch') {
-            $Listing = Dispatch::with($relationships[$status])
-                ->where('order_id', $listID)
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Dispatch')
                 ->first();
 
             if (!$Listing) {
                 return false;
             }
 
-            RequestBroker::where([
-                'order_id' => $listID,
-                'user_id' => $Listing->user_id,
-                'CMP_id' => $Listing->CMP_id
-            ])->update([
-                        'is_cancel' => 1
-                    ]);
+            // RequestBroker::where([
+            //     'order_id' => $listID,
+            //     'user_id' => $Listing->user_id,
+            //     'CMP_id' => $Listing->CMP_id
+            // ])->update([
+            //             'is_cancel' => 1
+            //         ]);
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->dispatch_listing->dispatch_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->dispatch_listing->dispatch_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->dispatch_listing->dispatch_user->email,
+                'Listed_User_Name' => $Listing->all_listing->dispatch_listing->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->dispatch_listing->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->dispatch_listing->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
 
         if ($status === 'PickUp Approval') {
-            $Listing = PickUpApprovals::with($relationships[$status])
-                ->where('order_id', $listID)
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'PickUp Approval')
                 ->first();
 
             if (!$Listing) {
@@ -404,16 +409,17 @@ class DayDispatchHelper
             }
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->pickup_approve->pickup_approval_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->pickup_approve->pickup_approval_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->pickup_approve->pickup_approval_user->email,
+                'Listed_User_Name' => $Listing->all_listing->pickup_approve->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->pickup_approve->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->pickup_approve->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
 
-        if ($status === 'PickUp') {
-            $Listing = PickupOrders::with($relationships[$status])
-                ->where('order_id', $listID)
+        if ($status === 'Pickup') {
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Pickup')
                 ->first();
 
             if (!$Listing) {
@@ -421,16 +427,17 @@ class DayDispatchHelper
             }
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->pickup->pickup_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->pickup->pickup_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->pickup->pickup_user->email,
+                'Listed_User_Name' => $Listing->all_listing->pickup->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->pickup->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->pickup->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
 
         if ($status === 'Deliver Approval') {
-            $Listing = DeliverApprovals::with($relationships[$status])
-                ->where('order_id', $listID)
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Deliver Approval')
                 ->first();
 
             if (!$Listing) {
@@ -438,16 +445,17 @@ class DayDispatchHelper
             }
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->deliver_approve->deliver_approval_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->deliver_approve->deliver_approval_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->deliver_approve->deliver_approval_user->email,
+                'Listed_User_Name' => $Listing->all_listing->deliver_approve->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->deliver_approve->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->deliver_approve->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
 
         if ($status === 'Delivered') {
-            $Listing = DeliverdOrders::with($relationships[$status])
-                ->where('order_id', $listID)
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Delivered')
                 ->first();
 
             if (!$Listing) {
@@ -455,16 +463,17 @@ class DayDispatchHelper
             }
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->deliver->delivered_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->deliver->delivered_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->deliver->delivered_user->email,
+                'Listed_User_Name' => $Listing->all_listing->deliver->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->deliver->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->deliver->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
 
         if ($status === 'Completed') {
-            $Listing = CompletedOrders::with($relationships[$status])
-                ->where('order_id', $listID)
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Completed')
                 ->first();
 
             if (!$Listing) {
@@ -472,16 +481,17 @@ class DayDispatchHelper
             }
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->completed->completed_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->completed->completed_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->completed->completed_user->email,
+                'Listed_User_Name' => $Listing->all_listing->completed->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->completed->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->completed->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
 
         if ($status === 'Cancelled') {
-            $Listing = CancelledOrders::with($relationships[$status])
-                ->where('order_id', $listID)
+            $Listing = ListingStatusUpdateHistory::with($relationships[$status])
+                ->where('list_id', $listID)
+                ->where('status', 'Cancelled')
                 ->first();
 
             if (!$Listing) {
@@ -489,9 +499,9 @@ class DayDispatchHelper
             }
 
             $data = [
-                'Listed_User_Name' => $Listing->all_listing->cancel->cancel_user->Company_Name,
-                'Listed_User_Phone' => $Listing->all_listing->cancel->cancel_user->Contact_Phone,
-                'Listed_User_Email' => $Listing->all_listing->cancel->cancel_user->email,
+                'Listed_User_Name' => $Listing->all_listing->cancel->waiting_users->Company_Name,
+                'Listed_User_Phone' => $Listing->all_listing->cancel->waiting_users->Contact_Phone,
+                'Listed_User_Email' => $Listing->all_listing->cancel->waiting_users->email,
             ];
             return array_merge(self::prepareMailData($Listing), $data);
         }
@@ -517,7 +527,7 @@ class DayDispatchHelper
             'Destination_Address' => $Listing->all_listing->routes->Destination_Address,
             'Destination_Address_II' => $Listing->all_listing->routes->Destination_Address_II,
             'Dest_ZipCode' => $Listing->all_listing->routes->Dest_ZipCode,
-            'Cmp_ID' => $Listing->CMP_id,
+            'Cmp_ID' => $Listing->cmp_id,
             'User_ID' => $Listing->user_id,
         ];
     }
@@ -548,10 +558,11 @@ class DayDispatchHelper
     public static function OrderCancel(string $Status, string $Order_ID, int $User_ID, int $CMP_ID): bool
     {
         if ($Status === 'Dispatch') {
-            Dispatch::where([
-                'order_id' => $Order_ID,
+            ListingStatusUpdateHistory::where([
+                'list_id' => $Order_ID,
                 'user_id' => $User_ID,
-                'CMP_id' => $CMP_ID
+                'cmp_id' => $CMP_ID,
+                'status' => $Status
             ])->delete();
             return true;
         }
@@ -565,11 +576,12 @@ class DayDispatchHelper
             return true;
         }
 
-        if ($Status === 'PickUp') {
-            PickupOrders::where([
-                'order_id' => $Order_ID,
+        if ($Status === 'Pickup') {
+            ListingStatusUpdateHistory::where([
+                'list_id' => $Order_ID,
                 'user_id' => $User_ID,
-                'CMP_id' => $CMP_ID
+                'cmp_id' => $CMP_ID,
+                'status' => $Status
             ])->delete();
             return true;
         }
@@ -584,10 +596,11 @@ class DayDispatchHelper
         }
 
         if ($Status === 'Delivered') {
-            DeliverdOrders::where([
-                'order_id' => $Order_ID,
+            ListingStatusUpdateHistory::where([
+                'list_id' => $Order_ID,
                 'user_id' => $User_ID,
-                'CMP_id' => $CMP_ID
+                'cmp_id' => $CMP_ID,
+                'status' => $Status
             ])->delete();
             return true;
         }
@@ -598,23 +611,24 @@ class DayDispatchHelper
     public static function getOrderCounts(int $user_id, string $usr_type): array
     {
         $commonConditions = $usr_type === 'Carrier' ? 'CMP_id' : 'user_id';
-        $listingCount = $usr_type === 'Carrier' ? AllUserListing::where('Custom_Listing', 0)->where('Private_Listing', 0)->where('Listing_Status', 'Listed')->count() : AllUserListing::where('Custom_Listing', 0)->where('Private_Listing', 0)->where('Listing_Status', 'Listed')->where('user_id', $user_id)->count();
+        $listingCount = $usr_type === 'Carrier' ? AllUserListing::whereNot('Listing_Status', 'Draft')->whereIn('Listing_Status', ['Listed', 'Scheduled'])->count() : AllUserListing::whereNot('Listing_Status', 'Draft')->whereIn('Listing_Status', ['Listed', 'Scheduled'])->where('user_id', $user_id)->count();
+        // $listingCount = $usr_type === 'Carrier' ? AllUserListing::where('Custom_Listing', 0)->where('Private_Listing', 0)->where('Listing_Status', 'Listed')->count() : AllUserListing::where('Custom_Listing', 0)->where('Private_Listing', 0)->where('Listing_Status', 'Listed')->where('user_id', $user_id)->count();
 
         return [
-            'Waiting_Approval' => WaitingForApproval::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
+            'Waiting_Approval' => ListingStatusUpdateHistory::where('status', 'Waiting Approval')->with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
             'Requested' => RequestBroker::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->where('is_cancel', 0)->count(),
-            'Dispatch' => Dispatch::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
-            'Time_Quote' => AllUserListing::where('Custom_Listing', 1)->where('Listing_Status', 'Listed')->where('user_id', $user_id)->count(),
-            'pvt_Listing' => AllUserListing::where('Private_Listing', 1)->where('Listing_Status', 'Listed')->where('user_id', $user_id)->count(),
+            'Dispatch' => ListingStatusUpdateHistory::where('status', 'Dispatch')->with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
+            'Time_Quote' => AllUserListing::where('Custom_Listing', 1)->where('Listing_Status', 'Scheduled')->where('user_id', $user_id)->count(),
+            'pvt_Listing' => AllUserListing::where('Private_Listing', 1)->where('Listing_Status', 'Draft')->where('user_id', $user_id)->count(),
             'Listed' => $listingCount,
-            'PickUp' => PickupOrders::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
-            'PickUp_Approval' => PickUpApprovals::where($commonConditions, $user_id)->count(),
-            'Deliver_Approval' => DeliverApprovals::where($commonConditions, $user_id)->count(),
-            'Delivered' => DeliverdOrders::where($commonConditions, $user_id)->count(),
-            'Archived' => AllUserListing::withTrashed()->where('Listing_Status', 'Archived')->where('user_id', $user_id)->count(),
-            'Completed' => CompletedOrders::where($commonConditions, $user_id)->count(),
-            'Cancelled' => CancelledOrders::withTrashed()->where($commonConditions, $user_id)->count(),
-            'Expired' => AllUserListing::expired()->where('user_id', $user_id)->count(),
+            'PickUp' => ListingStatusUpdateHistory::where('status', 'Pickup')->with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
+            'PickUp_Approval' => ListingStatusUpdateHistory::where('status', 'Pickup')->where($commonConditions, $user_id)->count(),
+            'Deliver_Approval' => ListingStatusUpdateHistory::where('status', 'Delivered')->where($commonConditions, $user_id)->count(),
+            'Delivered' => ListingStatusUpdateHistory::where('status', 'Delivered')->where($commonConditions, $user_id)->count(),
+            'Archived' => ArchiveListing::where('user_id', $user_id)->count(),
+            'Completed' => ListingStatusUpdateHistory::where('status', 'Completed')->where($commonConditions, $user_id)->count(),
+            'Cancelled' => ListingStatusUpdateHistory::where('status', 'Cancelled')->where($commonConditions, $user_id)->count(),
+            'Expired' => AllUserListing::where('Listing_Status', 'Expired')->where('user_id', $user_id)->count(),
             'Deleted' => AllUserListing::withTrashed()->where('Listing_Status', 'Deleted')->where('user_id', $user_id)->count(),
             'WatchList' => WatchList::where('user_id', $user_id)->whereHas('listing', function ($q) {
                 $q->where('Listing_Status', 'Listed');
@@ -622,6 +636,27 @@ class DayDispatchHelper
             'MiscItems' => MiscellenousItems::where('status', 0)->whereHas('all_listing', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
             })->count(), //count for Approve Misc Pay.
+            // 'Waiting_Approval' => WaitingForApproval::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
+            // 'Requested' => RequestBroker::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->where('is_cancel', 0)->count(),
+            // 'Dispatch' => Dispatch::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
+            // 'Time_Quote' => AllUserListing::where('Custom_Listing', 1)->where('Listing_Status', 'Listed')->where('user_id', $user_id)->count(),
+            // 'pvt_Listing' => AllUserListing::where('Private_Listing', 1)->where('Listing_Status', 'Listed')->where('user_id', $user_id)->count(),
+            // 'Listed' => $listingCount,
+            // 'PickUp' => PickupOrders::with('all_listing')->has('all_listing')->where($commonConditions, $user_id)->count(),
+            // 'PickUp_Approval' => PickUpApprovals::where($commonConditions, $user_id)->count(),
+            // 'Deliver_Approval' => DeliverApprovals::where($commonConditions, $user_id)->count(),
+            // 'Delivered' => DeliverdOrders::where($commonConditions, $user_id)->count(),
+            // 'Archived' => AllUserListing::withTrashed()->where('Listing_Status', 'Archived')->where('user_id', $user_id)->count(),
+            // 'Completed' => CompletedOrders::where($commonConditions, $user_id)->count(),
+            // 'Cancelled' => CancelledOrders::withTrashed()->where($commonConditions, $user_id)->count(),
+            // 'Expired' => AllUserListing::expired()->where('user_id', $user_id)->count(),
+            // 'Deleted' => AllUserListing::withTrashed()->where('Listing_Status', 'Deleted')->where('user_id', $user_id)->count(),
+            // 'WatchList' => WatchList::where('user_id', $user_id)->whereHas('listing', function ($q) {
+            //     $q->where('Listing_Status', 'Listed');
+            // })->count(), //count for My Watchlist
+            // 'MiscItems' => MiscellenousItems::where('status', 0)->whereHas('all_listing', function ($query) use ($user_id) {
+            //     $query->where('user_id', $user_id);
+            // })->count(), //count for Approve Misc Pay.
         ];
     }
 
@@ -661,21 +696,36 @@ class DayDispatchHelper
         $allListings = AllUserListing::get();
 
         return [
-            'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting For Approval')->count(),
-            'Requested' => AllUserListing::where('Listing_Status', 'Waiting For Approval')
+            'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting Approval')->count(),
+            'Requested' => AllUserListing::where('Listing_Status', 'Waiting Approval')
                 ->whereRelation('request_broker', 'is_cancel', 0)
                 ->count(),
             'Dispatch' => $allListings->where('Listing_Status', 'Dispatch')->count(),
-            'Time_Quote' => $allListings->where('Custom_Listing', 1)->count(),
-            'Listed' => $allListings->where('Custom_Listing', 0)->count(),
-            'PickUp' => $allListings->where('Listing_Status', 'PickUp')->count(),
-            'PickUp_Approval' => $allListings->where('Listing_Status', 'PickUp Approval')->count(),
-            'Deliver_Approval' => $allListings->where('Listing_Status', 'Deliver Approval')->count(),
+            'Time_Quote' => $allListings->where('Listing_Status', 'Scheduled')->count(),
+            'Listed' => $allListings->where('Listing_Status', 'Listed')->count(),
+            'PickUp' => $allListings->where('Listing_Status', 'Pickup')->count(),
+            'PickUp_Approval' => $allListings->where('Listing_Status', 'Pickup')->count(),
+            'Deliver_Approval' => $allListings->where('Listing_Status', 'Delivered')->count(),
             'Delivered' => $allListings->where('Listing_Status', 'Delivered')->count(),
-            'Archived' => AllUserListing::withTrashed()->count(),
+            'Archived' => $allListings->where('Is_archived', 1)->count(),
             'Completed' => $allListings->where('Listing_Status', 'Completed')->count(),
             'Cancelled' => $allListings->where('Listing_Status', 'Cancelled')->count(),
             'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
+            // 'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting Approval')->count(),
+            // 'Requested' => AllUserListing::where('Listing_Status', 'Waiting Approval')
+            //     ->whereRelation('request_broker', 'is_cancel', 0)
+            //     ->count(),
+            // 'Dispatch' => $allListings->where('Listing_Status', 'Dispatch')->count(),
+            // 'Time_Quote' => $allListings->where('Custom_Listing', 1)->count(),
+            // 'Listed' => $allListings->where('Custom_Listing', 0)->count(),
+            // 'PickUp' => $allListings->where('Listing_Status', 'Pickup')->count(),
+            // 'PickUp_Approval' => $allListings->where('Listing_Status', 'Pickup')->count(),
+            // 'Deliver_Approval' => $allListings->where('Listing_Status', 'Delivered')->count(),
+            // 'Delivered' => $allListings->where('Listing_Status', 'Delivered')->count(),
+            // 'Archived' => AllUserListing::withTrashed()->count(),
+            // 'Completed' => $allListings->where('Listing_Status', 'Completed')->count(),
+            // 'Cancelled' => $allListings->where('Listing_Status', 'Cancelled')->count(),
+            // 'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
         ];
     }
 
@@ -684,11 +734,11 @@ class DayDispatchHelper
         $allListings = AllUserListing::whereRelation('authorized_user', 'ref_code', $agent_code)->get();
 
         return [
-            'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting For Approval')->count(),
+            'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting Approval')->count(),
             'Dispatch' => $allListings->where('Listing_Status', 'Dispatch')->count(),
-            'Time_Quote' => $allListings->where('Custom_Listing', 1)->count(),
-            'Listed' => $allListings->where('Custom_Listing', 0)->count(),
-            'PickUp' => $allListings->where('Listing_Status', 'PickUp')->count(),
+            'Time_Quote' => $allListings->where('Listing_Status', 'Scheduled')->count(),
+            'Listed' => $allListings->where('Listing_Status', 'Listed')->count(),
+            'PickUp' => $allListings->where('Listing_Status', 'Pickup')->count(),
             'PickUp_Approval' => $allListings->where('Listing_Status', 'PickUp Approval')->count(),
             'Deliver_Approval' => $allListings->where('Listing_Status', 'Deliver Approval')->count(),
             'Delivered' => $allListings->where('Listing_Status', 'Delivered')->count(),
@@ -697,6 +747,19 @@ class DayDispatchHelper
             'Cancelled' => $allListings->where('Listing_Status', 'Cancelled')->count(),
             'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
             'User_Count' => AuthorizedUsers::where('ref_code', $agent_code)->count(),
+            // 'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting For Approval')->count(),
+            // 'Dispatch' => $allListings->where('Listing_Status', 'Dispatch')->count(),
+            // 'Time_Quote' => $allListings->where('Custom_Listing', 1)->count(),
+            // 'Listed' => $allListings->where('Custom_Listing', 0)->count(),
+            // 'PickUp' => $allListings->where('Listing_Status', 'PickUp')->count(),
+            // 'PickUp_Approval' => $allListings->where('Listing_Status', 'PickUp Approval')->count(),
+            // 'Deliver_Approval' => $allListings->where('Listing_Status', 'Deliver Approval')->count(),
+            // 'Delivered' => $allListings->where('Listing_Status', 'Delivered')->count(),
+            // 'Archived' => AllUserListing::withTrashed()->whereRelation('authorized_user', 'ref_code', $agent_code)->count(),
+            // 'Completed' => $allListings->where('Listing_Status', 'Completed')->count(),
+            // 'Cancelled' => $allListings->where('Listing_Status', 'Cancelled')->count(),
+            // 'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
+            // 'User_Count' => AuthorizedUsers::where('ref_code', $agent_code)->count(),
         ];
     }
 

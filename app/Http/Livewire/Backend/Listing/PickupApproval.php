@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Listing\{AllUserListing, OnlineBol, PickUpApprovals, PickupOrders};
 use Throwable;
 use App\Models\Listing\Dispatch;
+use App\Models\Listing\ListingStatusUpdateHistory;
 
 class PickupApproval extends Component
 {
@@ -47,24 +48,30 @@ class PickupApproval extends Component
         try {
             DB::beginTransaction();
 
-            $PickupOrders = new PickupOrders();
+            // $PickupOrders = new PickupOrders();
+            $PickupOrders = new ListingStatusUpdateHistory();
 
             $AllUserListing = AllUserListing::where('id', $request->List_ID)->first();
-            $AllUserListing->Listing_Status = 'PickUp';
+            $AllUserListing->Listing_Status = 'Pickup';
 
             // $RecordUpdate = PickUpApprovals::where('order_id', $request->List_ID)->first();
-            $RecordUpdate = Dispatch::where('order_id', $request->List_ID)->first();
-
+            $RecordUpdate = ListingStatusUpdateHistory::where('list_id', $request->List_ID)->where('status', 'Dispatch')->first();
 
             $PickupOrders->user_id = $RecordUpdate->user_id;
-            $PickupOrders->order_id = $request->List_ID;
-            $PickupOrders->CMP_id = $RecordUpdate->CMP_id;
+            $PickupOrders->list_id = $request->List_ID;
+            $PickupOrders->cmp_id = $RecordUpdate->cmp_id;
+            $PickupOrders->status_by = $RecordUpdate->cmp_id;
+            $PickupOrders->status = 'Pickup';
+
+            // $PickupOrders->user_id = $RecordUpdate->user_id;
+            // $PickupOrders->order_id = $request->List_ID;
+            // $PickupOrders->CMP_id = $RecordUpdate->CMP_id;
 
             if ($AllUserListing->update() && $PickupOrders->save()) {
-                $listingServices->OrderHistory('PickUp', null, null, $request->List_ID, $RecordUpdate->user_id, $RecordUpdate->CMP_id);
+                // $listingServices->OrderHistory('PickUp', null, null, $request->List_ID, $RecordUpdate->user_id, $RecordUpdate->CMP_id);
 
                 if ($RecordUpdate->delete()) {
-                    $flag = DayDispatchHelper::SendNotificationOnStatusChanged('PickUp', $request->List_ID);
+                    $flag = DayDispatchHelper::SendNotificationOnStatusChanged('Pickup', $request->List_ID);
 
                     if ($flag) {
                         DB::commit();

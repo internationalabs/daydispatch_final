@@ -43,7 +43,7 @@ class OrderAgreement extends Component
             ]
         ])->where('id', $request->List_ID)->firstOrFail();
 
-        $Agreement = $Lisiting->Listing_Status === 'Waiting For Approval';
+        $Agreement = $Lisiting->Listing_Status === 'Waiting Approval';
         $user_id = Auth::guard('Authorized')->user()->id;
         $DispatchOrderFee = DispatchOrderFee::where('order_id', $request->List_ID)->where('status', 1)->where('user_id', $user_id)->first();
         $Payment_Info = PaymentSystem::get();

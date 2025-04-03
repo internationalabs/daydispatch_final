@@ -29,6 +29,7 @@ use App\Models\Extras\Notification;
 use Illuminate\Support\Str;
 use App\Models\Listing\ListingRoutes;
 use App\Notifications\ListingAssigned;
+use App\Models\Listing\ListingStatusUpdateHistory;
 
 
 
@@ -82,7 +83,6 @@ class DispatchListing extends Component
         $user_id = Auth::guard('Authorized')->user()->id;
         $Listed_ID = $request->List_ID;
 
-
         $data = [
             'Destination_Location' => $request->Destination_Location,
             'Dest_User_Name' => $request->Dest_User_Name,
@@ -101,7 +101,6 @@ class DispatchListing extends Component
         } elseif ($request->has('Port_Dest_Auction_Method')) {
             $data['Dest_Auction_Method'] = $request->input('Port_Dest_Auction_Method');
         }
-
 
         ListingDestinationLocation::where('order_id', $Listed_ID)->update($data);
         // dd('success');
@@ -127,10 +126,7 @@ class DispatchListing extends Component
             $data['Auction_Method'] = $request->input('Auction_Method_abc');
         }
 
-
         ListingOrignLocation::where('order_id', $Listed_ID)->update($data);
-
-
 
         // Extract 'From' and 'To' from the request
         $From = Str::afterLast($request->Origin_ZipCode, ', ');
@@ -152,17 +148,6 @@ class DispatchListing extends Component
         ];
         ListingRoutes::where('order_id', $Listed_ID)->update($data);
 
-
-
-
-        // dd($request->input('Dest_Auction_Method'));
-
-
-
-
-
-        // update part for VEHICLE PICKUP INFORMATION
-
         ListingPickupDeliverInfo::where('order_id', $Listed_ID)->update([
             'Pickup_Date' => $request->Pickup_Date,
             'Delivery_Date' => $request->Delivery_Date,
@@ -174,12 +159,11 @@ class DispatchListing extends Component
 
         ]);
 
-
         try {
             DB::beginTransaction();
 
+            $listing_status_history = new ListingStatusUpdateHistory();              
 
-            $WaitingForApproval = new WaitingForApproval();
             $AllUserListing = AllUserListing::where('id', $Listed_ID)->where('user_id', $user_id)->first();
             $ListingAdditionalInfo = ListingAdditionalInfo::where('order_id', $Listed_ID)->first();
             $ListingAdditionalInfo->Additional_Terms = $request->Additional_Terms;
@@ -189,7 +173,7 @@ class DispatchListing extends Component
 
             $ListingAdditionalInfo->save();
 
-            $AllUserListing->Listing_Status = 'Waiting For Approval';
+            $AllUserListing->Listing_Status = 'Waiting Approval';
 
             $ListingPaymentInfo = ListingPaymentInfo::where('order_id', $Listed_ID)->first();
             if ($request->has('Booking_Price')) {
@@ -334,11 +318,15 @@ class DispatchListing extends Component
             }
 
             if ($AllUserListing->update()) {
-                $WaitingForApproval->user_id = $user_id;
-                $WaitingForApproval->order_id = $Listed_ID;
-                $WaitingForApproval->CMP_id = $request->Dispatch_Company_ID;
+                $listing_status_history->status = 'Waiting Approval';
+                $listing_status_history->user_id = $user_id;
+                $listing_status_history->list_id = $Listed_ID;
+                $listing_status_history->status_by = $user_id;
+                $listing_status_history->cmp_id = $request->Dispatch_Company_ID;
+                // dd($listing_status_history->save());
 
-                if ($WaitingForApproval->save()) {
+                if ($listing_status_history->save()) {
+                    
                     DispatchDriver::create([
                         'Driver_Name' => $request->Driver_Name,
                         'Driver_Email' => $request->Driver_Email,
@@ -350,7 +338,7 @@ class DispatchListing extends Component
                     // dd(AuthorizedUsers::find($request->Dispatch_Company_ID)->toArray());
                     $user = AuthorizedUsers::find($request->Dispatch_Company_ID);
 
-                    $flag = DayDispatchHelper::SendNotificationOnStatusChanged('Waiting For Approval', $Listed_ID);
+                    $flag = DayDispatchHelper::SendNotificationOnStatusChanged('Waiting Approval', $Listed_ID);
                     // $flag = $user->notify(new ListingAssigned($AllUserListing->Ref_ID));
                     if ($flag) {
                         DB::commit();
@@ -383,6 +371,6 @@ class DispatchListing extends Component
         $notification->user_id = $req_user->id;
         $notification->save();
 
-        return back()->with('success', "Request Declined");
+        return back()->with('Success!', "Request Declined");
     }
 }

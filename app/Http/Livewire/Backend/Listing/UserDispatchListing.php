@@ -35,37 +35,37 @@ class UserDispatchListing extends Component
             if ($request->has('Search_vehicleType') && $request->Search_vehicleType != null) {
                 $Search_vehicleType = $request->Search_vehicleType;
                 if ($request->Search_vehicleType == 'vehicles') {
-                    $Lisiting = Dispatch::orderBy('id', 'DESC')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::where('status', 'Dispatch')->orderBy('id', 'DESC')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 1);
                     })->get();
                 } elseif ($request->Search_vehicleType == 'heavy_equipments') {
-                    $Lisiting = Dispatch::orderBy('id', 'DESC')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::where('status', 'Dispatch')->orderBy('id', 'DESC')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 2);
                     })->get();
                 } elseif ($request->Search_vehicleType == 'dry_vans') {
-                    $Lisiting = Dispatch::orderBy('id', 'DESC')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::where('status', 'Dispatch')->orderBy('id', 'DESC')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 3);
                     })->get();
                 } else {
-                    $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+                    $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
                 }
             } else {
-                $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+                $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
             }
         } else {
             if ($request->has('Search_vehicleType') && $request->Search_vehicleType != null) {
                 $Search_vehicleType = $request->Search_vehicleType;
                 if ($request->Search_vehicleType == 'vehicles') {
-                    $Lisiting = Dispatch::orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::where('status', 'Dispatch')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 1);
                     })->get();
                 } elseif ($request->Search_vehicleType == 'heavy_equipments') {
-                    $Lisiting = Dispatch::orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::where('status', 'Dispatch')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 2);
                     })->get();
 
                 } elseif ($request->Search_vehicleType == 'dry_vans') {
-                    $Lisiting = Dispatch::orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = ListingStatusUpdateHistory::where('status', 'Dispatch')->orderBy('id', 'DESC')->with('all_listing')->where('user_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 3);
                     })->get();
 

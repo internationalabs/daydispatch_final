@@ -516,7 +516,7 @@ class ListingFilter extends Component
                 ->notExpire()->orderBy('id', 'DESC')->where('Private_Listing', 0)
                 ->paginate($request->input('per_page', 10));
         } else {
-            $Lisiting = AllUserListing::where('Private_Listing', 0)
+            $Lisiting = AllUserListing::where('Listing_Status', 'Listed')->where('Private_Listing', 0)
                 ->active()
                 // ->whereHas('My_Network', fn($q) => $q->where('status', '!=', 1))
                 ->carrierlisting()

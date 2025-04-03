@@ -609,13 +609,13 @@
                                     </td>
                                     <td>
                                         @php
-                                            $companyName = $List->all_listing->pickup->pickup_user->Company_Name;
+                                            $companyName = $List->all_listing->pickup->waiting_users->Company_Name;
                                             $trimmedCompanyName = Str::words($companyName, 3, '...');
                                         @endphp
 
                                         <span style="font-size: x-large;">
                                             <a target="_blank" class="locations-color"
-                                                href="{{ route('View.Profile', $List->all_listing->pickup->pickup_user->id) }}"
+                                                href="{{ route('View.Profile', $List->all_listing->pickup->waiting_users->id) }}"
                                                 data-bs-toggle="tooltip" data-bs-placement="top"
                                                 title="{{ $companyName }}">
                                                 <strong>{{ $trimmedCompanyName }}</strong>
@@ -623,33 +623,33 @@
                                         </span><br>
                                         {{-- <span style="font-size: x-large; ">
                                             <a target="_blank" class="locations-color"
-                                                href="{{ route('View.Profile', $List->all_listing->pickup->pickup_user->id) }}"><strong>{{ $List->all_listing->pickup->pickup_user->Company_Name }}</strong>
+                                                href="{{ route('View.Profile', $List->all_listing->pickup->waiting_users->id) }}"><strong>{{ $List->all_listing->pickup->waiting_users->Company_Name }}</strong>
                                             </a></span><br> --}}
                                         {{-- <strong><a
                                                 href="{{ route('View.Agreement', ['List_ID' => $List->all_listing->id]) }}"
                                                 target="_blank">View Contract</a>
                                         </strong> --}}
                                         {{-- <span>
-                                            <strong>Contact:</strong>{{ $List->all_listing->pickup->pickup_user->Contact_Phone }}
+                                            <strong>Contact:</strong>{{ $List->all_listing->pickup->waiting_users->Contact_Phone }}
                                         </span><br>
-                                        <strong>Email:</strong>{{ $List->all_listing->pickup->pickup_user->email }}
+                                        <strong>Email:</strong>{{ $List->all_listing->pickup->waiting_users->email }}
                                         </span> --}}
                                         <span>
                                             <strong>Contact:</strong>
                                             <a class="locations-color"
-                                                href="tel:{{ $List->all_listing->pickup->pickup_user->Contact_Phone }}">
-                                                {{ $List->all_listing->pickup->pickup_user->Contact_Phone }}
+                                                href="tel:{{ $List->all_listing->pickup->waiting_users->Contact_Phone }}">
+                                                {{ $List->all_listing->pickup->waiting_users->Contact_Phone }}
                                             </a>
                                         </span><br>
                                         <span>
                                             <strong>Email:</strong>
                                             <a class="locations-color"
-                                                href="mailto:{{ $List->all_listing->pickup->pickup_user->email }}">
-                                                {{ $List->all_listing->pickup->pickup_user->email }}
+                                                href="mailto:{{ $List->all_listing->pickup->waiting_users->email }}">
+                                                {{ $List->all_listing->pickup->waiting_users->email }}
                                             </a>
                                         </span><br>
                                         <strong>Time:</strong>
-                                        {{ $List->all_listing->pickup->pickup_user->Hours_Operations }}
+                                        {{ $List->all_listing->pickup->waiting_users->Hours_Operations }}
                                         </span><br>
                                         @php
                                             if (!function_exists('getUserRating')) {
@@ -668,7 +668,7 @@
                                                 }
                                             }
 
-                                            $userRatings = getUserRating($List->all_listing->pickup->pickup_user->id);
+                                            $userRatings = getUserRating($List->all_listing->pickup->waiting_users->id);
                                             $ratings = $userRatings['ratings'];
                                             $ratingsCount = $userRatings['count'];
 
@@ -892,13 +892,13 @@
                                                 ${{ $List->all_listing->paymentinfo->Price_Pay_Carrier }}</span>
                                         </span><br> --}}
                                         {{-- <strong>Assigned to:
-                                        </strong>{{ $List->all_listing->pickup->pickup_user->usr_type }}
+                                        </strong>{{ $List->all_listing->pickup->waiting_users->usr_type }}
                                         <br> --}}
                                         {{-- <strong><a
-                                                href="{{ route('View.Profile', $List->all_listing->pickup->pickup_user->id) }}"
+                                                href="{{ route('View.Profile', $List->all_listing->pickup->waiting_users->id) }}"
                                                 target="_blank">View
                                                 MC</a>&nbsp;&nbsp;<a
-                                                href="{{ route('View.Profile', $List->all_listing->pickup->pickup_user->id) }}"
+                                                href="{{ route('View.Profile', $List->all_listing->pickup->waiting_users->id) }}"
                                                 target="_blank">View DOT</a></strong> --}}
 
                                         {{-- @if (!empty($List->all_listing->request_broker->Offer_Price) && $List->all_listing->request_broker->Offer_Price !== 0)

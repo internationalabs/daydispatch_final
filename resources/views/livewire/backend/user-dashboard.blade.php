@@ -873,9 +873,9 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('View.Profile', $row->dispatch_user->id) }}"
+                                                    <a href="{{ route('View.Profile', $row->waiting_users->id) }}"
                                                         class="text-decoration-none text-black font-bold">
-                                                        {{ $row->dispatch_user->Company_Name }}
+                                                        {{ $row->waiting_users->Company_Name }}
                                                     </a>
                                                 </td>
                                                 <td class="name">
@@ -1064,9 +1064,9 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('View.Profile', $row->pickup_user->id) }}"
+                                                    <a href="{{ route('View.Profile', $row->waiting_users->id) }}"
                                                         class="text-decoration-none text-black font-bold">
-                                                        {{ $row->pickup_user->Company_Name }}
+                                                        {{ $row->waiting_users->Company_Name }}
                                                     </a>
                                                 </td>
                                                 <td class="name">
@@ -1257,9 +1257,9 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('View.Profile', $row->delivered_user->id) }}"
+                                                    <a href="{{ route('View.Profile', $row->waiting_users->id) }}"
                                                         class="text-decoration-none text-black font-bold">
-                                                        {{ $row->delivered_user->Company_Name }}
+                                                        {{ $row->waiting_users->Company_Name }}
                                                     </a>
                                                 </td>
                                                 <td class="name">

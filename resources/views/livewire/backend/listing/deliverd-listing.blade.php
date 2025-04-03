@@ -577,7 +577,7 @@
                                         <div class="dropdown-menu"> --}}
                                         {{-- <a class="btn mb-2 btn-primary w-100 btn-sm text-nowrap d-block btn-sm"
                                             href="{{ route('chat', $List->user_id) }}">Message Broker</a> --}}
-                                        {{-- @if ($List->all_listing->deliver->delivered_user->user_id === $currentUser->id) --}}
+                                        {{-- @if ($List->all_listing->deliver->waiting_users->user_id === $currentUser->id) --}}
                                         @if ($List->all_listing->Is_Rate != 1)
 
                                             <a class="btn btn-outline-primary  mb-2 w-100 d-block text-nowrap rate-order"
@@ -588,16 +588,15 @@
                                                 <input hidden type="text" class="Listed-ID"
                                                     value="{{ $List->all_listing->id }}">
                                                 <input hidden type="text" class="Profile-ID"
-                                                    value="{{ $List->all_listing->deliver->delivered_user->id }}">
+                                                    value="{{ $List->all_listing->deliver->waiting_users->id }}">
                                                 <input hidden type="text" class="Company-Name"
-                                                    value="{{ $List->all_listing->deliver->delivered_user->Company_Name }}">
+                                                    value="{{ $List->all_listing->deliver->waiting_users->Company_Name }}">
                                                 Rate Order
                                             </a>
                                         @else
-                                            <a type="button" class="btn btn-outline-primary mb-2 w-100 d-block"
-                                                disabled>
+                                            <button type="button" class="btn btn-outline-primary mb-2 w-100 d-block" disabled>
                                                 <span class="">Rate Order</span>
-                                            </a>
+                                            </button>
                                         @endif
                                         {{-- @endif --}}
                                         <a href="{{ route('View.Agreement', ['List_ID' => $List->all_listing->id]) }}"
@@ -743,14 +742,14 @@
                                 </td>
                                 <td>
                                     {{-- <strong><a target="_blank"
-                                            href="{{ route('View.Profile', $List->all_listing->deliver->delivered_user->id) }}">{{ $List->all_listing->deliver->delivered_user->Company_Name }}</a></strong><br> --}}
+                                            href="{{ route('View.Profile', $List->all_listing->deliver->waiting_users->id) }}">{{ $List->all_listing->deliver->waiting_users->Company_Name }}</a></strong><br> --}}
 
                                     @php
-                                        $companyName = $List->all_listing->deliver->delivered_user->Company_Name;
+                                        $companyName = $List->all_listing->deliver->waiting_users->Company_Name;
                                         $trimmedCompanyName = Str::words($companyName, 3, '...');
                                     @endphp
                                     <span style="font-size: x-large; "><a class="locations-color"
-                                            href="{{ route('View.Profile', $List->all_listing->deliver->delivered_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->deliver->waiting_users->id) }}"
                                             target="_blank"><strong class="locations-color"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="top"
@@ -758,27 +757,27 @@
                                                 {{ $trimmedCompanyName }}</strong></a></span>
                                     <br>
                                     {{-- <span>
-                                    <strong>Contact:</strong>{{ $List->all_listing->deliver->delivered_user->Contact_Phone }}
+                                    <strong>Contact:</strong>{{ $List->all_listing->deliver->waiting_users->Contact_Phone }}
                                     </span><br>
-                                    <strong>Email:</strong>{{ $List->all_listing->deliver->delivered_user->email }}
+                                    <strong>Email:</strong>{{ $List->all_listing->deliver->waiting_users->email }}
                                     </span> --}}
                                     <span>
                                         <strong>Contact:</strong>
                                         <a class="locations-color"
-                                            href="tel:{{ $List->all_listing->deliver->delivered_user->Contact_Phone }}">
-                                            {{ $List->all_listing->deliver->delivered_user->Contact_Phone }}
+                                            href="tel:{{ $List->all_listing->deliver->waiting_users->Contact_Phone }}">
+                                            {{ $List->all_listing->deliver->waiting_users->Contact_Phone }}
                                         </a>
                                     </span><br>
                                     <span>
                                         <strong>Email:</strong>
                                         <a class="locations-color"
-                                            href="mailto:{{ $List->all_listing->deliver->delivered_user->email }}">
-                                            {{ $List->all_listing->deliver->delivered_user->email }}
+                                            href="mailto:{{ $List->all_listing->deliver->waiting_users->email }}">
+                                            {{ $List->all_listing->deliver->waiting_users->email }}
                                         </a>
                                     </span>
                                     <br>
                                     <strong>Time:</strong>
-                                    {{ $List->all_listing->deliver->delivered_user->Hours_Operations }}
+                                    {{ $List->all_listing->deliver->waiting_users->Hours_Operations }}
                                     </span><br>
                                     @php
                                         if (!function_exists('getUserRating')) {
@@ -794,7 +793,7 @@
                                                 ];
                                             }
                                         }
-                                        $userRatings = getUserRating($List->all_listing->deliver->delivered_user->id);
+                                        $userRatings = getUserRating($List->all_listing->deliver->waiting_users->id);
                                         $ratings = $userRatings['ratings'];
                                         $ratingsCount = $userRatings['count'];
 
@@ -1025,12 +1024,12 @@
                                     {{-- <strong>Price to Pay:
                                     </strong><span>${{ $List->all_listing->paymentinfo->Price_Pay_Carrier }}</span><br> --}}
                                     {{-- <strong>Assigned
-                                        to:</strong>{{ $List->all_listing->deliver->delivered_user->usr_type }}
+                                        to:</strong>{{ $List->all_listing->deliver->waiting_users->usr_type }}
                                     <br> --}}
                                     {{-- <strong><a
-                                            href="{{ route('View.Profile', $List->all_listing->deliver->delivered_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->deliver->waiting_users->id) }}"
                                             target="_blank">View MC</a>&nbsp;&nbsp;<a
-                                            href="{{ route('View.Profile', $List->all_listing->deliver->delivered_user->id) }}"
+                                            href="{{ route('View.Profile', $List->all_listing->deliver->waiting_users->id) }}"
                                             target="_blank">View DOT</a></strong> --}}
                                     {{-- @if (!empty($List->all_listing->request_broker->Offer_Price) && $List->all_listing->request_broker->Offer_Price !== 0)
                                     <span class="text-danger fs-5 text-nowrap">
@@ -1105,16 +1104,15 @@
                                                 <input hidden type="text" class="Listed-ID"
                                                     value="{{ $List->all_listing->id }}">
                                                 <input hidden type="text" class="Profile-ID"
-                                                    value="{{ $List->all_listing->deliver->delivered_user->id }}">
+                                                    value="{{ $List->all_listing->deliver->waiting_users->id }}">
                                                 <input hidden type="text" class="Company-Name"
-                                                    value="{{ $List->all_listing->deliver->delivered_user->Company_Name }}">
+                                                    value="{{ $List->all_listing->deliver->waiting_users->Company_Name }}">
                                                 Rate Order
                                             </a>
                                         @else
-                                            <a type="button" class="btn btn-outline-primary mb-2 w-100 d-block"
-                                                disabled>
-                                                <span class="">Rate Order</span>
-                                            </a>
+                                        <button type="button" class="btn btn-outline-primary mb-2 w-100 d-block" disabled>
+                                            <span class="">Rate Order</span>
+                                        </button>
                                         @endif
                                     @endif
                                     <a class="btn btn-outline-primary mb-2 w-100 d-block"

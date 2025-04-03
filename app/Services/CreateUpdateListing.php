@@ -56,31 +56,32 @@ class CreateUpdateListing
         $ListingRoutes = new ListingRoutes();
         $ListingOrignLocation = new ListingOrignLocation();
         $listing_destination_locations = new ListingDestinationLocation();
-
+        
         $AllUserListing->user_id = $user_id;
         
         if($auth_user && $auth_user->admin_verify == 0){
             $AllUserListing->Custom_Listing = 0;
             $AllUserListing->Private_Listing = 1;
+            $AllUserListing->Listing_Status = 'Draft';
         }else{
+            
             $AllUserListing->Custom_Listing = is_null($request->Custom_Listing) ? 0 : 1;
             $AllUserListing->Private_Listing = is_null($request->Private_Listing) ? 0 : 1;
-            $AllUserListing->Posted_Date = $request->Custom_Date;
+
+            if (is_null($request->Custom_Listing) && is_null($request->Private_Listing)) {
+                $AllUserListing->Listing_Status = 'Listed';
+            }elseif ($request->Private_Listing === 1 || $request->Private_Listing === '1') {
+                $AllUserListing->Listing_Status = 'Draft';
+            }elseif ($request->Custom_Listing === 1 || $request->Custom_Listing === '1') {
+                $AllUserListing->Listing_Status = 'Scheduled';
+                $AllUserListing->Posted_Date = $request->Custom_Date;
+            }
         }
-        // if ($request->Custom_Listing == 0) {
-        //     $AllUserListing->Listing_Status = 'Time Quote';
-        // }elseif ($request->Private_Listing == 0) {
-        //     $AllUserListing->Listing_Status = 'Pvt Listing';
-        // }else{
-        // }
-        // dd($AllUserListing->Custom_Listing, $AllUserListing->Private_Listing);
-        
-        $AllUserListing->Listing_Status = 'Listed';
+
         $AllUserListing->Ref_ID = $request->Ref_ID;
         $AllUserListing->Listing_Type = $request->post_type;
         $AllUserListing->expire_at = Carbon::now()->addDays(5);
         $AllUserListing->vehicle_count = $vehicle_count;
-        // dd($AllUserListing->Private_Listing);
 
         if ($AllUserListing->save()) {
             $ListingOrignLocation->user_id = $user_id;
@@ -358,7 +359,8 @@ class CreateUpdateListing
         $ListingOrignLocation = ListingOrignLocation::where('order_id', $Listed_ID)->first();
         $listing_destination_locations = ListingDestinationLocation::where('order_id', $Listed_ID)->first();
 
-        $Record_Update = CancelledOrders::where('order_id', $Listed_ID)->first();
+        // $Record_Update = CancelledOrders::where('order_id', $Listed_ID)->first();
+        $Record_Update = ListingStatusUpdateHistory::where('status', 'Cancelled')->where('list_id', $Listed_ID)->first();
 
         $AllUserListing = AllUserListing::where('id', $Listed_ID)->first();
         $AllUserListing->vehicle_count = $vehicle_count;

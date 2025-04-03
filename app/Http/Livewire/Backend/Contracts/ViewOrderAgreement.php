@@ -7,6 +7,7 @@ use App\Models\Listing\ListingAgreement;
 use Livewire\Component;
 use App\Models\Carrier\RequestBroker;
 use App\Models\Listing\WaitingForApproval;
+use App\Models\Listing\ListingStatusUpdateHistory;
 
 class ViewOrderAgreement extends Component
 {
@@ -54,9 +55,11 @@ class ViewOrderAgreement extends Component
                 }
             ])->where('order_id', $this->List_ID)->first();
         } else {
-            $this->Lisiting = WaitingForApproval::where('order_id', $this->List_ID)
+            $this->Lisiting = ListingStatusUpdateHistory::where('list_id', $this->List_ID)
+                ->where('status', 'Waiting Approval')
                 ->with('all_listing', 'waiting_users')
                 ->has('all_listing')
+                ->withTrashed()
                 ->first();
 
             // dd($this->Lisiting->toArray());
@@ -66,7 +69,7 @@ class ViewOrderAgreement extends Component
             $q->where('Listing_Status', '!=', 'Listed');
         })->first();
 
-        $this->Agreement = $this->Lisiting && $this->Lisiting->all_listing && $this->Lisiting->all_listing->Listing_Status === 'Waiting For Approval';
+        $this->Agreement = $this->Lisiting && $this->Lisiting->all_listing && $this->Lisiting->all_listing->Listing_Status === 'Waiting Approval';
     }
 
     public function render()

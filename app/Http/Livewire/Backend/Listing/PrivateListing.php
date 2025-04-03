@@ -95,7 +95,7 @@ class PrivateListing extends Component
         // Base Query
         $query = AllUserListing::orderBy('id', 'DESC')
             ->where('Private_Listing', 1)
-            ->active();
+            ->where('Listing_Status', 'Draft');
 
         // Add listing type constraints
         if ($auth_user->usr_type === 'Carrier') {

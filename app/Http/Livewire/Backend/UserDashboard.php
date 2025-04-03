@@ -22,6 +22,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use App\Models\Listing\ListingStatusUpdateHistory;
+
 class UserDashboard extends Component
 {
     protected ListingServices $listingServices;
@@ -42,15 +44,20 @@ class UserDashboard extends Component
         $pickup = $this->listingServices->getPickupOrders();
         $delivered = $this->listingServices->getDeliveredOrders();
         $waiting = $this->listingServices->getWaitingOrders();
-        $dispatch = Dispatch::with('all_listing')->orderBy('updated_at', 'DESC')->get();
-        $pickup = PickupOrders::with('all_listing')->orderBy('updated_at', 'DESC')->get();
-        $delivered = DeliverdOrders::with('all_listing')->orderBy('updated_at', 'DESC')->get();
-        $waiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        $dispatch = ListingStatusUpdateHistory::where('status', 'Dispatch')->with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        $pickup = ListingStatusUpdateHistory::where('status', 'Pickup')->with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        $delivered = ListingStatusUpdateHistory::where('status', 'Delivered')->with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        $waiting = ListingStatusUpdateHistory::whereDoesntHave('all_listing.agreement')->where('status', 'Waiting Approval')->with('all_listing')->orderBy('updated_at', 'DESC')->get();
+
+        // $dispatch = Dispatch::with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        // $pickup = PickupOrders::with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        // $delivered = DeliverdOrders::with('all_listing')->orderBy('updated_at', 'DESC')->get();
+        // $waiting = WaitingForApproval::whereDoesntHave('all_listing.agreement')->with('all_listing')->orderBy('updated_at', 'DESC')->get();
         if ($currentUser->usr_type === 'Carrier') {
-            $dispatch = $dispatch->where('CMP_id', $currentUser->id)->take(5);
-            $pickup = $pickup->where('CMP_id', $currentUser->id)->take(5);
-            $delivered = $delivered->where('CMP_id', $currentUser->id)->take(5);
-            $waiting = $waiting->where('CMP_id', $currentUser->id)->take(5);
+            $dispatch = $dispatch->where('cmp_id', $currentUser->id)->take(5);
+            $pickup = $pickup->where('cmp_id', $currentUser->id)->take(5);
+            $delivered = $delivered->where('cmp_id', $currentUser->id)->take(5);
+            $waiting = $waiting->where('cmp_id', $currentUser->id)->take(5);
         } else {
             $dispatch = $dispatch->where('user_id', $currentUser->id)->take(5);
             $pickup = $pickup->where('user_id', $currentUser->id)->take(5);
@@ -58,7 +65,7 @@ class UserDashboard extends Component
             $waiting = $waiting->where('user_id', $currentUser->id)->take(5);
         }
 
-        $LisitingCount = AllUserListing::where('Private_Listing', 0)
+        $LisitingCount = AllUserListing::whereNotIn('Listing_Status', ['Draft', 'Scheduled'])
             ->active()
             ->whereHas('My_Network', fn($q) => $q->where('status', '!=', 1))
             ->carrierlisting()
@@ -71,7 +78,8 @@ class UserDashboard extends Component
                 $query->withTrashed();  // Include soft-deleted records
             }
         ])
-            ->where('Listing_Status', '!=', 'Archived')
+            // ->where('Listing_Status', '!=', 'Archived')
+            ->where('Is_archived', '!=', 1)
             ->has('paymentinfo')
             ->has('deliver')
             ->where('user_id', $currentUser->id)

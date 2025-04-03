@@ -76,8 +76,7 @@ class OnlineBolController extends Controller
             "listing_destination_locations",
             "attachments",
         )->where('id', $Listed_ID)
-
-            ->firstOrFail();
+        ->firstOrFail();
         // dd($Lisiting);
 
         $tracking_history = ListingAgreement::with([

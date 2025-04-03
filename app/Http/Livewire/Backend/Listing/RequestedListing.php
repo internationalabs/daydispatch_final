@@ -48,22 +48,22 @@ class RequestedListing extends Component
             if ($request->has('Search_vehicleType') && $request->Search_vehicleType != null) {
                 $Search_vehicleType = $request->Search_vehicleType;
                 if ($request->Search_vehicleType == 'vehicles') {
-                    $Lisiting = RequestBroker::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->active()->where('status', 'Pending')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = RequestBroker::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->active()->where('status', 'Pending')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 1);
                     })->paginate($perPage);
                 } elseif ($request->Search_vehicleType == 'heavy_equipments') {
-                    $Lisiting = RequestBroker::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->active()->where('status', 'Pending')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = RequestBroker::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->active()->where('status', 'Pending')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 2);
                     })->paginate($perPage);
                 } elseif ($request->Search_vehicleType == 'dry_vans') {
-                    $Lisiting = RequestBroker::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->active()->where('status', 'Pending')->with('all_listing')->where('CMP_id', $auth_user->id)->whereHas('all_listing', function ($query) {
+                    $Lisiting = RequestBroker::whereDoesntHave('all_listing.agreement')->orderBy('id', 'DESC')->active()->where('status', 'Pending')->with('all_listing')->where('cmp_id', $auth_user->id)->whereHas('all_listing', function ($query) {
                         $query->where('Listing_Type', 3);
                     })->paginate($perPage);
                 } else {
-                    $Lisiting = $Lisiting->where('CMP_id', $auth_user->id)->paginate($perPage);
+                    $Lisiting = $Lisiting->where('cmp_id', $auth_user->id)->paginate($perPage);
                 }
             } else {
-                $Lisiting = $Lisiting->where('CMP_id', $auth_user->id)->paginate($perPage);
+                $Lisiting = $Lisiting->where('cmp_id', $auth_user->id)->paginate($perPage);
             }
         } else {
             if ($request->has('Search_vehicleType') && $request->Search_vehicleType != null) {

@@ -222,6 +222,7 @@ class AllUsers extends Component
     $privatelisting = AllUserListing::where('id', $Listed_ID)
         ->where('user_id', $user_id)
         ->where('Private_Listing', 1)
+        ->where('Listing_Status', 'Draft')
         ->first();
         
     if (!$privatelisting) {
@@ -229,6 +230,7 @@ class AllUsers extends Component
     }
 
     $privatelisting->Private_Listing = 0;
+    $privatelisting->Listing_Status = 'Listed';
 
     if ($privatelisting->save()) { // Use save() instead of update()
         return redirect()->route('User.Listing')->with('success', "Your listing has been published.");

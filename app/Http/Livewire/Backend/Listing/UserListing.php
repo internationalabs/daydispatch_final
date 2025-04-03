@@ -108,7 +108,7 @@ class UserListing extends Component
             $RequestCarrier->Requested_Email = $request->Requested_Email;
             $RequestCarrier->Requested_Comments = $request->Requested_Comments;
             $RequestCarrier->order_id = $Listed_ID;
-            $RequestCarrier->CMP_id = $user_id;
+            $RequestCarrier->cmp_id = $user_id;
             $RequestCarrier->user_id = $user_id;
 
             $mailData = [
@@ -170,7 +170,7 @@ class UserListing extends Component
                 $RequestBroker->Delivery_Date = $request->Delivery_Date;
                 $RequestBroker->Bid_Comment = $request->Bid_Comment;
                 $RequestBroker->order_id = $Listed_ID;
-                $RequestBroker->CMP_id = $user_id;
+                $RequestBroker->cmp_id = $user_id;
                 $RequestBroker->type = $request->type ?? 'request';
                 $RequestBroker->user_id = $Listing_Info->user_id;
 

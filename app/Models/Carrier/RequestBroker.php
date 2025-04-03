@@ -14,7 +14,7 @@ class RequestBroker extends Model
 {
     use HasFactory;
     protected $table = "request_brokers";
-    protected $fillable = ['is_cancel', 'order_id', 'user_id', 'CMP_id', 'type'];
+    protected $fillable = ['is_cancel', 'order_id', 'user_id', 'cmp_id', 'type'];
 
     /**
      * Get the authorized_user that owns the Dispatch
@@ -43,7 +43,7 @@ class RequestBroker extends Model
      */
     public function requested_user(): BelongsTo
     {
-        return $this->belongsTo(AuthorizedUsers::class, 'CMP_id');
+        return $this->belongsTo(AuthorizedUsers::class, 'cmp_id');
     }
 
     public function scopeActive($query)

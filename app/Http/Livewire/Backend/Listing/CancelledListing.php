@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Listing\AllUserListing;
 use App\Models\Listing\CancelledOrders;
+use App\Models\Listing\ListingStatusUpdateHistory;
 use Illuminate\Pagination\LengthAwarePaginator;
 use RuntimeException;
 use Throwable;
@@ -31,7 +32,7 @@ class CancelledListing extends Component
         $auth_user = Auth::guard('Authorized')->user();
         $Lisiting = $this->listingServices->getCancelledOrders();
         if ($auth_user->usr_type === 'Carrier') {
-            $Lisiting = $Lisiting->where('CMP_id', $auth_user->id);
+            $Lisiting = $Lisiting->where('cmp_id', $auth_user->id);
         } else {
             $Lisiting = $Lisiting->where('user_id', $auth_user->id);
         }
@@ -52,19 +53,21 @@ class CancelledListing extends Component
             $user_id = Auth::guard('Authorized')->user()->id;
 
             return DB::transaction(static function () use ($request, $listingServices, $user_id) {
-                $CancelledOrders = new CancelledOrders();
+                $CancelledOrders = new ListingStatusUpdateHistory();
 
                 $AllUserListing = AllUserListing::where('id', $request->get_Listed_ID)->first();
                 $AllUserListing->Listing_Status = 'Cancelled';
 
                 if ($AllUserListing->update()) {
                     $CancelledOrders->user_id = $request->get_User_ID;
-                    $CancelledOrders->order_id = $request->get_Listed_ID;
-                    $CancelledOrders->CMP_id = $request->get_CMP_ID;
-                    $CancelledOrders->Main_Reason = $request->Main_Reason;
-                    $CancelledOrders->Detail_Reason = $request->Detail_Reason;
-                    $CancelledOrders->Cancelled_By = $user_id;
-                    $listingServices->OrderHistory('Cancelled', $user_id, null, $request->get_Listed_ID, $request->get_User_ID, $request->get_CMP_ID);
+                    $CancelledOrders->list_id = $request->get_Listed_ID;
+                    $CancelledOrders->cmp_id = $request->get_CMP_ID;
+                    $CancelledOrders->main_reason = $request->Main_Reason;
+                    $CancelledOrders->detail_reason = $request->Detail_Reason;
+                    $CancelledOrders->status_by = $user_id;
+                    $CancelledOrders->status = 'Cancelled';
+                    
+                    // $listingServices->OrderHistory('Cancelled', $user_id, null, $request->get_Listed_ID, $request->get_User_ID, $request->get_CMP_ID);
 
                     if ($CancelledOrders->save()) {
                         $flag = DayDispatchHelper::SendNotificationOnStatusChanged2('Cancelled', $request->get_Listed_ID);
@@ -96,18 +99,19 @@ class CancelledListing extends Component
                 $AllUserListing->Listing_Status = 'Listed';
                 $user_id = Auth::guard('Authorized')->user()->id;
 
-                $CancelledOrders = new CancelledOrders();
+                $CancelledOrders = new ListingStatusUpdateHistory();
 
                 if ($AllUserListing->update()) {
-                    $RecordUpdate = WaitingForApproval::where('order_id', $request->get_Listed_ID)->first();
+                    $RecordUpdate = ListingStatusUpdateHistory::where('list_id', $request->get_Listed_ID)->where('status', 'Waiting Approval')->first();
 
                     if ($RecordUpdate->delete()) {
                         $CancelledOrders->user_id = $request->get_User_ID;
-                        $CancelledOrders->order_id = $request->get_Listed_ID;
-                        $CancelledOrders->CMP_id = $request->get_CMP_ID;
-                        $CancelledOrders->Main_Reason = $request->Main_Reason;
-                        $CancelledOrders->Detail_Reason = $request->Detail_Reason;
-                        $CancelledOrders->Cancelled_By = $user_id;
+                        $CancelledOrders->list_id = $request->get_Listed_ID;
+                        $CancelledOrders->cmp_id = $request->get_CMP_ID;
+                        $CancelledOrders->main_reason = $request->Main_Reason;
+                        $CancelledOrders->detail_reason = $request->Detail_Reason;
+                        $CancelledOrders->status_by = $user_id;
+                        $CancelledOrders->status = 'Cancelled';
                         if ($CancelledOrders->save()) {
                             // return back()->with('Success!', "Your Order Request has been Cancelled Successfully!");
                             return redirect()->route('Cancelled.Listing')->with('Success!', "Your Order has been Cancelled Successfully!");
