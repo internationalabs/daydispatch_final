@@ -9,7 +9,7 @@ class AllListing extends Component
 {
     public function render()
     {
-        $Lisiting = AllUserListing::active()->carrierlisting()->get();
+        $Lisiting = AllUserListing::whereIn('Listing_Status', ['Listed' , 'Scheduled' , 'Draft' , 'Waiting Approval' , 'Dispatch' , 'Delivered' , 'Pickup' , 'Cancelled' , 'Expired'])->carrierlisting()->get();
         return view('livewire.backend.admin.listing.all-listing', compact('Lisiting'))->layout('layouts.authorized-admin');
     }
 }

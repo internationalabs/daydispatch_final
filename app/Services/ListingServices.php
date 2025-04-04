@@ -128,45 +128,57 @@ class ListingServices
 
     public function getWaitingOrders(): Collection|array
     {
-        return ListingStatusUpdateHistory::where('status', 'Waiting Approval')->whereDoesntHave('all_listing.agreement')->with(
-            relations: [
-                'all_listing' => [
-                    'authorized_user' => function ($q) {
-                        $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
-                            'insurance',
-                            'certificates'
-                        ]);
-                    },
-                    'waitings' => [
-                        'waiting_users' => function ($q) {
+        
+        $query = ListingStatusUpdateHistory::where('status', 'Waiting Approval')->with(
+                relations: [
+                    'all_listing' => [
+                        'authorized_user' => function ($q) {
                             $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
                                 'insurance',
                                 'certificates'
                             ]);
-                        }
+                        },
+                        'waitings' => [
+                            'waiting_users' => function ($q) {
+                                $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
+                                    'insurance',
+                                    'certificates'
+                                ]);
+                            }
+                        ],
+                        "paymentinfo",
+                        "additional_info" => function ($q) {
+                            $q->select('id', 'order_id', 'Additional_Terms');
+                        },
+                        "pickup_delivery_info",
+                        "vehicles",
+                        "heavy_equipments",
+                        "dry_vans",
+                        "dry_vans_services",
+                        "routes",
+                        "request_broker",
+                        "attachments"
                     ],
-                    "paymentinfo",
-                    "additional_info" => function ($q) {
-                        $q->select('id', 'order_id', 'Additional_Terms');
-                    },
-                    "pickup_delivery_info",
-                    "vehicles",
-                    "heavy_equipments",
-                    "dry_vans",
-                    "dry_vans_services",
-                    "routes",
-                    "request_broker",
-                    "attachments"
-                ],
-            ]
-        )->has('all_listing')->orderBy('updated_at', 'DESC')->get();
+                ]
+            )->has('all_listing')
+            ->orderBy('updated_at', 'DESC');
+
+            if (Auth::guard('Admin')->check()) {
+                return $query
+                ->withTrashed()
+                ->get();
+            }else{
+                return $query
+                ->whereDoesntHave('all_listing.agreement')
+                ->get();
+            }       
     }
 
     public function getDispatchesOrders(): Collection|array
     {
-        return ListingStatusUpdateHistory::where('status', 'Dispatch')->with([
+        $query = ListingStatusUpdateHistory::where('status', 'Dispatch')->with([
             'all_listing' => function ($query) {
-                $query->where('Listing_Status', 'Dispatch')->with([
+                $query->with([
                     'authorized_user' => function ($q) {
                         $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')
                             ->with([
@@ -196,7 +208,16 @@ class ListingServices
                     "attachments"
                 ]);
             }
-        ])->has('all_listing')->orderBy('updated_at', 'DESC')->get();
+        ])->has('all_listing')->orderBy('updated_at', 'DESC');
+        
+        if (Auth::guard('Admin')->check()) {
+            return $query
+            ->withTrashed()
+            ->get();
+        }else{
+            return $query
+            ->get();
+        }
     }
 
     public function getDispatchesOrdersSearch($user_id, $Search): Collection|array
@@ -249,7 +270,7 @@ class ListingServices
 
     public function getPickupOrders(): Collection|array
     {
-        return ListingStatusUpdateHistory::where('status', 'Pickup')->with(
+        $query =  ListingStatusUpdateHistory::where('status', 'Pickup')->with(
             relations: [
                 'all_listing' => [
                     'authorized_user' => function ($q) {
@@ -280,7 +301,15 @@ class ListingServices
                     "attachments"
                 ],
             ]
-        )->has('all_listing')->orderBy('updated_at', 'DESC')->get();
+        )->has('all_listing')->orderBy('updated_at', 'DESC');
+        if (Auth::guard('Admin')->check()) {
+            return $query
+            ->withTrashed()
+            ->get();
+        }else{
+            return $query
+            ->get();
+        }
     }
 
     public function getDeliverApprovalOrders(): Collection|array
@@ -322,61 +351,102 @@ class ListingServices
     public function getDeliveredOrders(): Collection|array
     {
 
-        $authUser = Auth::guard('Authorized')->user();
-        $authUserId = $authUser->id;
-    
-        if ($authUser->usr_type === 'Broker') {
-            $archivedListingIds = ArchiveListing::where('user_id', $authUserId)->pluck('order_id')->toArray();
-        }
-        else {
-            $archivedListingIds = ArchiveListing::where('user_id', $authUserId)->pluck('order_id')->toArray();
-        }
+        if(Auth::guard('Admin')->check()){
 
-        // $authUserId = Auth::guard('Authorized')->user()->id;
-        // $archivedListingIds = ArchiveListing::where('user_id', $authUserId)->pluck('order_id')->toArray();
-
-        return ListingStatusUpdateHistory::where('status', 'Delivered')->with(
-            relations: [
-                'all_listing' => [
-                    'authorized_user' => function ($q) {
-                        $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
-                            'insurance',
-                            'certificates'
-                        ]);
-                    },
-                    'deliver' => [
-                        'waiting_users' => function ($q) {
+            return ListingStatusUpdateHistory::where('status', 'Delivered')->with(
+                relations: [
+                    'all_listing' => [
+                        'authorized_user' => function ($q) {
                             $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
                                 'insurance',
                                 'certificates'
                             ]);
                         },
-                    ],
-                    "paymentinfo",
-                    "additional_info" => function ($q) {
-                        $q->select('id', 'order_id', 'Additional_Terms');
-                    },
-                    "pickup_delivery_info",
-                    "vehicles",
-                    "heavy_equipments",
-                    "dry_vans",
-                    "dry_vans_services",
-                    "routes",
-                    "request_broker",
-                    "attachments"
+                        'deliver' => [
+                            'waiting_users' => function ($q) {
+                                $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
+                                    'insurance',
+                                    'certificates'
+                                ]);
+                            },
+                        ],
+                        "paymentinfo",
+                        "additional_info" => function ($q) {
+                            $q->select('id', 'order_id', 'Additional_Terms');
+                        },
+                        "pickup_delivery_info",
+                        "vehicles",
+                        "heavy_equipments",
+                        "dry_vans",
+                        "dry_vans_services",
+                        "routes",
+                        "request_broker",
+                        "attachments"
+                    ]
                 ]
-            ]
-        )->whereHas('all_listing')
-            // ->whereHas('all_listing', function ($q) {
-            //     $q->where('Listing_Status', '!=', 'Archived');
-            // })
-            ->whereNotIn('list_id', $archivedListingIds)
-            ->orderBy('updated_at', 'DESC')->get();
+            )->whereHas('all_listing')
+                // ->whereHas('all_listing', function ($q) {
+                //     $q->where('Listing_Status', '!=', 'Archived');
+                // })
+                ->withTrashed()
+                ->orderBy('updated_at', 'DESC')->get();
+
+        }else{
+
+            $authUser = Auth::guard('Authorized')->user();
+            $authUserId = $authUser->id;
+
+            if ($authUser->usr_type === 'Broker') {
+                $archivedListingIds = ArchiveListing::where('user_id', $authUserId)->pluck('order_id')->toArray();
+            }
+            else {
+                $archivedListingIds = ArchiveListing::where('user_id', $authUserId)->pluck('order_id')->toArray();
+            }
+
+            return ListingStatusUpdateHistory::where('status', 'Delivered')->with(
+                relations: [
+                    'all_listing' => [
+                        'authorized_user' => function ($q) {
+                            $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
+                                'insurance',
+                                'certificates'
+                            ]);
+                        },
+                        'deliver' => [
+                            'waiting_users' => function ($q) {
+                                $q->select('id', 'Company_Name', 'Time_Zone', 'Hours_Operations', 'Contact_Phone', 'email')->with([
+                                    'insurance',
+                                    'certificates'
+                                ]);
+                            },
+                        ],
+                        "paymentinfo",
+                        "additional_info" => function ($q) {
+                            $q->select('id', 'order_id', 'Additional_Terms');
+                        },
+                        "pickup_delivery_info",
+                        "vehicles",
+                        "heavy_equipments",
+                        "dry_vans",
+                        "dry_vans_services",
+                        "routes",
+                        "request_broker",
+                        "attachments"
+                    ]
+                ]
+            )->whereHas('all_listing')
+                // ->whereHas('all_listing', function ($q) {
+                //     $q->where('Listing_Status', '!=', 'Archived');
+                // })
+                ->whereNotIn('list_id', $archivedListingIds)
+                ->orderBy('updated_at', 'DESC')->get();
+        }
+
     }
 
     public function getCompletedOrders(): Collection|array
     {
-        return ListingStatusUpdateHistory::where('status', 'Completed')->with(
+        $query =  ListingStatusUpdateHistory::where('status', 'Completed')->with(
             relations: [
                 'all_listing' => [
                     'authorized_user' => function ($q) {
@@ -411,12 +481,20 @@ class ListingServices
             // ->whereHas('all_listing', function ($q) {
             //     $q->where('Listing_Status', '!=', 'Archived');
             // })
-            ->orderBy('updated_at', 'DESC')->get();
+            ->orderBy('updated_at', 'DESC');
+            if (Auth::guard('Admin')->check()) {
+                return $query
+                ->withTrashed()
+                ->get();
+            }else{
+                return $query
+                ->get();
+            }
     }
 
     public function getCancelledOrders(): Collection|array
     {
-        return ListingStatusUpdateHistory::where('status', 'Cancelled')
+        $query =  ListingStatusUpdateHistory::where('status', 'Cancelled')
     ->with([
         'all_listing' => function ($query) {
             $query->with([
@@ -450,8 +528,15 @@ class ListingServices
             $q->select('id', 'Company_Name', 'email', 'Time_Zone', 'Hours_Operations', 'Contact_Phone');
         },
     ])
-    ->orderBy('updated_at', 'DESC')
-    ->get();
+    ->orderBy('updated_at', 'DESC');
+    if (Auth::guard('Admin')->check()) {
+        return $query
+        ->withTrashed()
+        ->get();
+    }else{
+        return $query
+        ->get();
+    }
     }
 
     public function getProfileCompleteList($User_ID): Collection|array

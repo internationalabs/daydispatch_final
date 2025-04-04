@@ -187,13 +187,21 @@ class OrderFormController extends Controller
         $listing_destination_locations = new ListingDestinationLocation();
 
         $AllUserListing->user_id = $user_id;
-        $AllUserListing->Listing_Status = 'Listed';
         $AllUserListing->Ref_ID = $order->Ref_ID;
         // $AllUserListing->Custom_Listing = is_null($order->Custom_Listing) ? 0 : 1;
-        // $AllUserListing->Private_Listing = is_null($order->Private_Listing) ? 0 : 1;
+        // $AllUserListing->Private_Listing = is_null($order->Private_Listing) ? 0 : 1;        
         $AllUserListing->Custom_Listing = !is_null($order->Custom_Listing) ? $order->Custom_Listing : 0;
         $AllUserListing->Private_Listing = !is_null($order->Private_Listing) ? $order->Private_Listing : 0;
-        $AllUserListing->Posted_Date = $order->Posted_Date;
+
+        if (is_null($order->Custom_Listing) && is_null($order->Private_Listing)) {
+            $AllUserListing->Listing_Status = 'Listed';
+        }elseif ($order->Private_Listing === 1 || $order->Private_Listing === '1') {
+            $AllUserListing->Listing_Status = 'Draft';
+        }elseif ($order->Custom_Listing === 1 || $order->Custom_Listing === '1') {
+            $AllUserListing->Listing_Status = 'Scheduled';
+            $AllUserListing->Posted_Date = $order->Posted_Date;
+        }
+
         $AllUserListing->Listing_Type = $order->Listing_Type;
         $AllUserListing->expire_at = $order->expire_at;
         $AllUserListing->vehicle_count = $order->vehicle_count;

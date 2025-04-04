@@ -39,19 +39,19 @@
                 <tr>
                     <td>
                         <strong>Pickup Route</strong><br>
-                        <a href="https://www.google.com/maps/dir/{{ $List->routes->Origin_ZipCode }},+USA/{{ $List->routes->Dest_ZipCode }},+USA/"
+                        <a href="https://www.google.com/maps/dir/{{ $List->all_listing->routes->Origin_ZipCode }},+USA/{{ $List->all_listing->routes->Dest_ZipCode }},+USA/"
                            target="_blank">
-                            {{ Str::replace(',', '-', $List->routes->Origin_ZipCode) }}
+                            {{ Str::replace(',', '-', $List->all_listing->routes->Origin_ZipCode) }}
                         </a><br>
                         <strong>Delivery Route</strong><br>
-                        <a href="https://www.google.com/maps/dir/{{ $List->routes->Origin_ZipCode }},+USA/{{ $List->routes->Dest_ZipCode }},+USA/"
+                        <a href="https://www.google.com/maps/dir/{{ $List->all_listing->routes->Origin_ZipCode }},+USA/{{ $List->all_listing->routes->Dest_ZipCode }},+USA/"
                            target="_blank">
-                            {{ Str::replace(',', '-', $List->routes->Dest_ZipCode) }}
+                            {{ Str::replace(',', '-', $List->all_listing->routes->Dest_ZipCode) }}
                         </a>
                     </td>
                     <td>
-                        @if(count($List->vehicles) === 1)
-                            @foreach ($List->vehicles as $vehcile)
+                        @if(count($List->all_listing->vehicles) === 1)
+                            @foreach ($List->all_listing->vehicles as $vehcile)
                                 <a href="https://www.google.com/search?q={{ $vehcile->Vehcile_Year }}%20{{ $vehcile->Vehcile_Make }}%20{{ $vehcile->Vehcile_Model }}"
                                    target="_blank"> {{ $vehcile->Vehcile_Year }}
                                     {{ $vehcile->Vehcile_Make }}
@@ -64,11 +64,11 @@
                                 @endif
                             @endforeach
                         @endif
-                        @if(count($List->vehicles) > 1)
+                        @if(count($List->all_listing->vehicles) > 1)
                             <a href="javascript:void(0)" tabindex="0" class="" data-toggle="popover"
                                data-trigger="focus" style="cursor: pointer;"
                                title="Attached vehicles" data-content=
-                                   "@foreach ($List->vehicles as $vehcile)
+                                   "@foreach ($List->all_listing->vehicles as $vehcile)
                                 <a href='https://www.google.com/search?q={{ $vehcile->Vehcile_Year }}%20{{ $vehcile->Vehcile_Make }}%20{{ $vehcile->Vehcile_Model }}'
                                 target='_blank'> {{ $vehcile->Vehcile_Year }}
                                 {{ $vehcile->Vehcile_Make }}
@@ -79,11 +79,11 @@
                                 @if (!empty($vehcile->Trailer_Type))
                                     {{ $vehcile->Trailer_Type }} <br>
                                 @endif
-                            @endforeach" data-html="true">vehicles ({{ count($List->vehicles) }})
+                            @endforeach" data-html="true">vehicles ({{ count($List->all_listing->vehicles) }})
                             </a>
                         @endif
-                        @if(count($List->heavy_equipments) === 1)
-                            @foreach ($List->heavy_equipments as $vehcile)
+                        @if(count($List->all_listing->heavy_equipments) === 1)
+                            @foreach ($List->all_listing->heavy_equipments as $vehcile)
                                 {{ $vehcile->Equipment_Year }}
                                 {{ $vehcile->Equipment_Make }}
                                 {{ $vehcile->Equipment_Model }}<br>
@@ -95,11 +95,11 @@
                                 @endif
                             @endforeach
                         @endif
-                        @if(count($List->heavy_equipments) > 1)
+                        @if(count($List->all_listing->heavy_equipments) > 1)
                             <a href="javascript:void(0)" tabindex="0" class="" data-toggle="popover"
                                data-trigger="focus" style="cursor: pointer;"
                                title="Attached vehicles" data-content=
-                                   "@foreach ($List->heavy_equipments as $vehcile)
+                                   "@foreach ($List->all_listing->heavy_equipments as $vehcile)
                                 {{ $vehcile->Equipment_Year }}
                                 {{ $vehcile->Equipment_Make }}
                                 {{ $vehcile->Equipment_Model }}<br>
@@ -109,11 +109,11 @@
                                 @if (!empty($vehcile->Trailer_Type))
                                     {{ $vehcile->Trailer_Type }} <br>
                                 @endif
-                            @endforeach" data-html="true">vehicles ({{ count($List->heavy_equipments) }})
+                            @endforeach" data-html="true">vehicles ({{ count($List->all_listing->heavy_equipments) }})
                             </a>
                         @endif
-                        @if(count($List->dry_vans) === 1)
-                            @foreach ($List->dry_vans as $vehcile)
+                        @if(count($List->all_listing->dry_vans) === 1)
+                            @foreach ($List->all_listing->dry_vans as $vehcile)
                                 {{ $vehcile->Freight_Class }}
                                 {{ $vehcile->Freight_Weight }}<br>
                                 @if ($vehcile->is_hazmat_Check !== 0)
@@ -121,56 +121,56 @@
                                 @endif
                             @endforeach
                         @endif
-                        @if(count($List->dry_vans) > 1)
+                        @if(count($List->all_listing->dry_vans) > 1)
                             <a href="javascript:void(0)" tabindex="0" class="" data-toggle="popover"
                                data-trigger="focus" style="cursor: pointer;"
                                title="Attached vehicles" data-content=
-                                   "@foreach ($List->dry_vans as $vehcile)
+                                   "@foreach ($List->all_listing->dry_vans as $vehcile)
                                 {{ $vehcile->Freight_Class }}
                                 {{ $vehcile->Freight_Weight }}<br>
                                 @if ($vehcile->is_hazmat_Check !== 0)
                                     Hazmat Required<br>
                                 @endif
                             @endforeach" data-html="true">vehicles
-                                ({{ count($List->dry_vans) }})
+                                ({{ count($List->all_listing->dry_vans) }})
                             </a>
                         @endif
                         <br>
                         <a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus"
                            title="Additional Terms" data-content=
-                               "{{ !empty($List->additional_info->Additional_Terms) ? $List->additional_info->Additional_Terms : '' }}">
-                            {{ !empty($List->additional_info->Additional_Terms) ? Str::limit($List->additional_info->Additional_Terms, 20) : '...' }}</a>
+                               "{{ !empty($List->all_listing->additional_info->Additional_Terms) ? $List->all_listing->additional_info->Additional_Terms : '' }}">
+                            {{ !empty($List->all_listing->additional_info->Additional_Terms) ? Str::limit($List->all_listing->additional_info->Additional_Terms, 20) : '...' }}</a>
                     </td>
                     <td>
-                        <strong>Ref-ID:</strong>{{ $List->Ref_ID }} <br>
-                        {{ $List->routes->Miles }} miles <br>
-                        $ {{ DayDispatchHelper::PricePerMiles($List->paymentinfo->COD_Amount, $List->routes->Miles) }}
+                        <strong>Ref-ID:</strong>{{ $List->all_listing->Ref_ID }} <br>
+                        {{ $List->all_listing->routes->Miles }} miles <br>
+                        $ {{ DayDispatchHelper::PricePerMiles($List->all_listing->paymentinfo->COD_Amount, $List->all_listing->routes->Miles) }}
                         /miles
                     </td>
                     <td>
                         {{-- <strong>Price to Pay: </strong> $ --}}
-                        {{-- {{ $List->paymentinfo->Order_Booking_Price }}<br> --}}
+                        {{-- {{ $List->all_listing->paymentinfo->Order_Booking_Price }}<br> --}}
                         <strong>COD / COP: </strong> $
-                        {{ $List->paymentinfo->COD_Amount }}<br>
-                        {{ $List->paymentinfo->COD_Method_Mode }}
-                        @if(!empty($List->request_broker->Offer_Price) && $List->request_broker->Offer_Price !== 0)
+                        {{ $List->all_listing->paymentinfo->COD_Amount }}<br>
+                        {{ $List->all_listing->paymentinfo->COD_Method_Mode }}
+                        @if(!empty($List->request_broker->Offer_Price) && $List->all_listing->request_broker->Offer_Price !== 0)
                             <br>
                             <strong>Ask Price:
-                            </strong>${{ $List->request_broker->Offer_Price }}
+                            </strong>${{ $List->all_listing->request_broker->Offer_Price }}
                         @endif
                     </td>
                     <td>
                         <strong>Pickup Date: </strong><br>
-                        ({{ $List->pickup_delivery_info->Pickup_Date_mode }})
-                        {{ \Carbon\Carbon::parse($List->pickup_delivery_info->Pickup_Date)->format('d M, Y') }}
+                        ({{ $List->all_listing->pickup_delivery_info->Pickup_Date_mode }})
+                        {{ \Carbon\Carbon::parse($List->all_listing->pickup_delivery_info->Pickup_Date)->format('d M, Y') }}
                         <br>
                         <strong>Deliver Date: </strong><br>
-                        ({{ $List->pickup_delivery_info->Delivery_Date_mode }})
-                        {{ \Carbon\Carbon::parse($List->pickup_delivery_info->Delivery_Date)->format('d M, Y') }}
+                        ({{ $List->all_listing->pickup_delivery_info->Delivery_Date_mode }})
+                        {{ \Carbon\Carbon::parse($List->all_listing->pickup_delivery_info->Delivery_Date)->format('d M, Y') }}
                     </td>
                     <td>
                         <strong>Expired Date: </strong><br>
-                        {{ \Carbon\Carbon::parse($List->expire_at)->format('d M, Y') }}
+                        {{ \Carbon\Carbon::parse($List->all_listing->expire_at)->format('d M, Y') }}
                         <a href="{{ route('User.Order.Agreement', ['List_ID' => $List->all_listing->id]) }}"
                            class="btn btn-sm btn-primary" role="button">View Detail</a>
                     </td>

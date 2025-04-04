@@ -694,23 +694,45 @@ class DayDispatchHelper
     public static function getAdminCounts(): array
     {
         $allListings = AllUserListing::get();
+        $allArchived = ArchiveListing::get();
+        $allProcessListings = ListingStatusUpdateHistory::withTrashed()->get();
 
         return [
-            'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting Approval')->count(),
+            // 'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting Approval')->count(),
+            // 'Requested' => AllUserListing::where('Listing_Status', 'Waiting Approval')
+            //     ->whereRelation('request_broker', 'is_cancel', 0)
+            //     ->count(),
+            // 'Dispatch' => $allListings->where('Listing_Status', 'Dispatch')->count(),
+            // 'Time_Quote' => $allListings->where('Listing_Status', 'Scheduled')->count(),
+            // 'Listed' => $allListings->where('Listing_Status', 'Listed')->count(),
+            // 'PickUp' => $allListings->where('Listing_Status', 'Pickup')->count(),
+            // 'PickUp_Approval' => $allListings->where('Listing_Status', 'Pickup')->count(),
+            // 'Deliver_Approval' => $allListings->where('Listing_Status', 'Delivered')->count(),
+            // 'Delivered' => $allListings->where('Listing_Status', 'Delivered')->count(),
+            // 'Archived' => $allArchived->count(),
+            // 'Completed' => $allListings->where('Listing_Status', 'Completed')->count(),
+            // 'Cancelled' => $allListings->where('Listing_Status', 'Cancelled')->count(),
+            // 'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
+
+            'Listed' => $allListings->where('Listing_Status', 'Listed')->count(),
+            'Time_Quote' => $allListings->where('Listing_Status', 'Scheduled')->count(),
+            'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
+
+            'Archived' => $allArchived->count(),
+
+            'Waiting_Approval' => $allProcessListings->where('status', 'Waiting Approval')->count(),
             'Requested' => AllUserListing::where('Listing_Status', 'Waiting Approval')
                 ->whereRelation('request_broker', 'is_cancel', 0)
                 ->count(),
-            'Dispatch' => $allListings->where('Listing_Status', 'Dispatch')->count(),
-            'Time_Quote' => $allListings->where('Listing_Status', 'Scheduled')->count(),
-            'Listed' => $allListings->where('Listing_Status', 'Listed')->count(),
-            'PickUp' => $allListings->where('Listing_Status', 'Pickup')->count(),
-            'PickUp_Approval' => $allListings->where('Listing_Status', 'Pickup')->count(),
-            'Deliver_Approval' => $allListings->where('Listing_Status', 'Delivered')->count(),
-            'Delivered' => $allListings->where('Listing_Status', 'Delivered')->count(),
-            'Archived' => $allListings->where('Is_archived', 1)->count(),
-            'Completed' => $allListings->where('Listing_Status', 'Completed')->count(),
-            'Cancelled' => $allListings->where('Listing_Status', 'Cancelled')->count(),
-            'Expired' => $allListings->where('Listing_Status', 'Expired')->count(),
+            'Dispatch' => $allProcessListings->where('status', 'Dispatch')->count(),
+            'PickUp' => $allProcessListings->where('status', 'Pickup')->count(),
+            'PickUp_Approval' => $allProcessListings->where('status', 'Pickup')->count(),
+            'Deliver_Approval' => $allProcessListings->where('status', 'Delivered')->count(),
+            'Delivered' => $allProcessListings->where('status', 'Delivered')->count(),
+            'Completed' => $allProcessListings->where('status', 'Completed')->count(),
+            'Cancelled' => $allProcessListings->where('status', 'Cancelled')->count(),
+
+
             // 'Waiting_Approval' => $allListings->where('Listing_Status', 'Waiting Approval')->count(),
             // 'Requested' => AllUserListing::where('Listing_Status', 'Waiting Approval')
             //     ->whereRelation('request_broker', 'is_cancel', 0)
