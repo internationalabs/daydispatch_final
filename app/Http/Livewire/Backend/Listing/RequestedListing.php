@@ -119,7 +119,7 @@ class RequestedListing extends Component
             //         'is_cancel' => 1
             //     ]);
             RequestBroker::where('id', $request->List_ID)
-                ->where('user_id', $user_id)
+                // ->where('cmp_id', $user_id)
                 ->update([
                     'is_cancel' => 1
                 ]);

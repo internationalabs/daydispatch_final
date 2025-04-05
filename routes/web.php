@@ -725,7 +725,7 @@ Route::group(['middleware' => ['Authorized', 'check.logins'], 'prefix' => 'Autho
     Route::post('/Dispatch-Listing-Post', [WaitingForApprovals::class, 'assignDispatch'])->name('User.Wait.Listing');
 
     Route::get('/Dispatch-Listing', UserDispatchListing::class, )->name('Dispatch.Listing');
-    Route::get('/Dispatch-Listing/{List_ID}', DispatchListing::class, )->name('User.Dispatch.Listing');
+    Route::get('/Dispatch-Listing/{List_ID}/{req_user?}', DispatchListing::class, )->name('User.Dispatch.Listing');
     Route::post('/Waiting-Listing-Post', [DispatchListing::class, 'assignWaitings'])->name('User.Dispatch.Listing.Post');
     Route::post('/Request-Listing-Delete', [DispatchListing::class, 'delete_req'])->name('User.Request.Listing.Delete');
 

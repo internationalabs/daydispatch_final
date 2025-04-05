@@ -102,12 +102,12 @@ class CancelledListing extends Component
                 $CancelledOrders = new ListingStatusUpdateHistory();
 
                 if ($AllUserListing->update()) {
-                    $RecordUpdate = ListingStatusUpdateHistory::where('list_id', $request->get_Listed_ID)->where('status', 'Waiting Approval')->first();
+                    $RecordUpdate = ListingStatusUpdateHistory::where('list_id', $request->get_Listed_ID)->where('status', 'Waiting Approval')->where('cmp_id', $user_id)->first();
 
                     if ($RecordUpdate->delete()) {
                         $CancelledOrders->user_id = $request->get_User_ID;
                         $CancelledOrders->list_id = $request->get_Listed_ID;
-                        $CancelledOrders->cmp_id = $request->get_CMP_ID;
+                        $CancelledOrders->cmp_id = $user_id;
                         $CancelledOrders->main_reason = $request->Main_Reason;
                         $CancelledOrders->detail_reason = $request->Detail_Reason;
                         $CancelledOrders->status_by = $user_id;

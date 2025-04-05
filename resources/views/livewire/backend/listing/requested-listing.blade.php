@@ -539,8 +539,11 @@
                                         @endif
                                         Modify Request
                                     </a>
-                                    <a class="btn btn-outline-primary mb-2 w-100 d-block text-nowrap">Withdraw
-                                        Request S</a>
+                                    <a class="btn btn-outline-primary mb-2 w-100 d-block"
+                                            href="{{ route('Requested.Listing.Canceled', ['List_ID' => $List->id]) }}">Withdraw
+                                            Request</a>
+                                    {{-- <a class="btn btn-outline-primary mb-2 w-100 d-block text-nowrap">Withdraw
+                                        Request S</a> --}}
                                     {{-- <button class="btn btn-outline-primary mb-2 w-100 d-block compare-listing text-nowrap"
                                         data-toggle="modal" data-target="#CompareListing" href="javascript:void(0);">
                                         <input hidden type="text" class="Listed-ID"
@@ -1116,7 +1119,7 @@
                                     </div> --}}
                                     @if ($List->all_listing->user_id === $currentUser->id)
                                         <a class="btn btn-outline-primary mb-2 w-100 d-block"
-                                            href="{{ route('User.Dispatch.Listing', ['List_ID' => $List->all_listing->id]) }}">Assign
+                                            href="{{ route('User.Dispatch.Listing', ['List_ID' => $List->all_listing->id, 'req_user' => $List->requested_user->id]) }}">Assign
                                             Carrier</a>
                                         <a class="btn btn-outline-primary mb-2 w-100 d-block"
                                             href="{{ route('Requested.Listing.Canceled', ['List_ID' => $List->id]) }}">Decline

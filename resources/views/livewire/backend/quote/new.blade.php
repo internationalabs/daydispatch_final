@@ -825,7 +825,307 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row p-3">
+                                            <div class="col-lg-6 shadow-sm border rounded p-3">
+                                                {{-- <h5 class="text-center"><b>ORIGIN LOCATION</b></h5> --}}
+                                                <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i> Customer Information
+                                                </h4>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                           
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-8 ">
+                                                        <div class="form-group">
+                                                            <label>Business Name</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder="Type at least 3 characters"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your Business Name.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Type</label>
+                                                            <select class="form-control" name="">
+                                                                <option value="" disabled selected>Select Type</option>
+                                                                <option value="option 1">option 1</option>
+                                                                <option value="option 2">option 2</option>
+                                                                <option value="option 3">option 3</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">
+                                                                Please select a type.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Contact Name</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Contact name.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-lg-6 ">
+                                                        <div class="form-group">
+                                                            <label>Billing Email</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your Billing Email.
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
+                                                    <br>
+                                                    {{-- <h3>Contact</h3> --}}
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Phone Nmber</label>
+                                                            <input type="number" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your Phone Number.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Title</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your Billing Email.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Phone</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                 Your phone.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Mobile</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Your Mobile.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Email</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder=""
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your Email.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 ">
+                                                        <div class="form-group">
+                                                            <label>Address</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder="Type at least 3 characters"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your Address.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 ">
+                                                        <div class="form-group">
+                                                            <label>City</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder="City"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your City Name.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>State</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder="State"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Your State Name.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Zip Code</label>
+                                                            <input type="text" class="form-control"
+                                                                name="" placeholder="Zip Code"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Zip Code.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 ">
+                                                        <div class="form-group">
+                                                            <label>Note For Customer</label>
+                                                            <textarea cols="30" rows="5" name="Vehcile_Desc" placeholder="Write something..." class="form-control"></textarea>
+                                                            <div class="invalid-feedback">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6 shadow-sm border rounded p-3">
+                                                {{-- <h5 class="text-center"><b>DESTINATION LOCATION</b></h5> --}}
+                                                <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i> Customer Payment
+                                                </h4>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Total Tariff</label>
+                                                            <input type="text" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Total Tariff.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Deposite</label>
+                                                            <input type="text" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Deposite.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label>Terms</label>
+                                                            <input type="text" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Terms.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Paid Ammount</label>
+                                                            <input type="text" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Paid Ammount.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Paid Method</label>
+                                                            <input type="text" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Paid Method.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Reference Number</label>
+                                                            <input type="text" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Reference Number.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Recived Date</label>
+                                                            <input type="date" class="form-control"
+                                                                name=""
+                                                                placeholder="Enter User Name"
+                                                                value=""
+                                                                autocomplete="off">
+                                                            <div class="invalid-feedback">
+                                                                Enter Recived Date.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 ">
+                                                        <div class="form-group">
+                                                            <label>Notes</label>
+                                                            <textarea cols="30" rows="5" name="Vehcile_Desc"  class="form-control"></textarea>
+                                                            <div class="invalid-feedback">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                 
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row p-3">
                                             <div class="col-lg-12 shadow-sm p-3 border">
                                                 {{-- <h5 class="text-center"><b>VEHICLE INFORMATION</b></h5> --}}
@@ -996,19 +1296,19 @@
                                                                     <option value="SUV">SUV</option>
                                                                     <option value="Pickup">Pickup</option>
                                                                     <option value="Van">Van</option>
-                                                                    <option disabled="">————————————</option>
+                                                                    <option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>
                                                                     <option value="motorcycle">Motorcycle</option>
                                                                     <option value="atv">ATV</option>
-                                                                    <option disabled="">————————————</option>
+                                                                    <option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>
                                                                     <option value="Mini Van">Mini Van</option>
                                                                     <option value="Cargo Van">Cargo Van</option>
                                                                     <option value="Passenger Van">Passenger Van</option>
-                                                                    <option disabled="">————————————</option>
+                                                                    <option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>
                                                                     <option value="Boat">Boat</option>
                                                                     <option value="Large Yacht">Large Yacht</option>
                                                                     <option value="RVs">RVs</option>
                                                                     <option value="Travel Trailer">Travel Trailer</option>
-                                                                    <option disabled="">————————————</option>
+                                                                    <option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>
                                                                     <option value="other_vehicle">Other Vehicle</option>
                                                                     <option value="other_motorcycle">Other Motorcycle
                                                                     </option>
@@ -1876,6 +2176,7 @@
                                                 </div>
                                             </div>
                                         </div> --}}
+                                        
                                         <div class="row p-3">
                                             <div class="col-lg-6 shadow-sm border rounded p-3">
                                                 {{-- <h5 class="text-center"><b>ORIGIN LOCATION</b></h5> --}}
@@ -2587,12 +2888,12 @@
                                             <input hidden name="post_type" value="2">
                                             <div class="row mt-4">
                                                 <div class="col-lg-4">
-                                                    <div class="form-group form-check">
+                                                    {{-- <div class="form-group form-check">
                                                         <input type="checkbox" class="form-check-input" name="Custom_Listing"
                                                             value="1" id="custom_Check">
                                                         <label class="form-check-label" for="custom_Check">Custom
                                                             Listing</label>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="form-group Custom-Date">
                                                         <label>Posted Date</label>
                                                         <input type="date" class="form-control"
@@ -2681,7 +2982,307 @@
                                                 </div>
                                             </div>
                                             <!--  -->
-
+                                            <div class="row p-3">
+                                                <div class="col-lg-6 shadow-sm border rounded p-3">
+                                                    {{-- <h5 class="text-center"><b>ORIGIN LOCATION</b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                        style="background: #113771;">
+                                                        <i class="bi bi-hash mr-2"></i> Customer Information
+                                                    </h4>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                               
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8 ">
+                                                            <div class="form-group">
+                                                                <label>Business Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="Type at least 3 characters"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Business Name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Type</label>
+                                                                <select class="form-control" name="">
+                                                                    <option value="" disabled selected>Select Type</option>
+                                                                    <option value="option 1">option 1</option>
+                                                                    <option value="option 2">option 2</option>
+                                                                    <option value="option 3">option 3</option>
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    Please select a type.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Contact Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Contact name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-lg-6 ">
+                                                            <div class="form-group">
+                                                                <label>Billing Email</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Billing Email.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+    
+                                                        <br>
+                                                        {{-- <h3>Contact</h3> --}}
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Phone Nmber</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Phone Number.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Title</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Billing Email.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Phone</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                     Your phone.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Mobile</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Your Mobile.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Email.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 ">
+                                                            <div class="form-group">
+                                                                <label>Address</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="Type at least 3 characters"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Address.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 ">
+                                                            <div class="form-group">
+                                                                <label>City</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="City"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your City Name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <div class="form-group">
+                                                                <label>State</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="State"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your State Name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <div class="form-group">
+                                                                <label>Zip Code</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="Zip Code"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Zip Code.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 ">
+                                                            <div class="form-group">
+                                                                <label>Note For Customer</label>
+                                                                <textarea cols="30" rows="5" name="Vehcile_Desc" placeholder="Write something..." class="form-control"></textarea>
+                                                                <div class="invalid-feedback">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="col-lg-6 shadow-sm border rounded p-3">
+                                                    {{-- <h5 class="text-center"><b>DESTINATION LOCATION</b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                        style="background: #113771;">
+                                                        <i class="bi bi-hash mr-2"></i> Customer Payment
+                                                    </h4>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Total Tariff</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Total Tariff.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Deposite</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Deposite.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Terms</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Terms.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Paid Ammount</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Paid Ammount.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Paid Method</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Paid Method.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Reference Number</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Reference Number.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Recived Date</label>
+                                                                <input type="date" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Recived Date.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 ">
+                                                            <div class="form-group">
+                                                                <label>Notes</label>
+                                                                <textarea cols="30" rows="5" name="Vehcile_Desc"  class="form-control"></textarea>
+                                                                <div class="invalid-feedback">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                     
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row p-3">
                                             <div class="col-lg-6 shadow-sm border rounded p-3">
                                                 {{-- <h5 class="text-center"><b>ORIGIN LOCATION</b></h5> --}}
@@ -3816,12 +4417,12 @@
                                             <input hidden name="post_type" value="3">
                                             <div class="row mt-4">
                                                 <div class="col-lg-4">
-                                                    <div class="form-group form-check">
+                                                    {{-- <div class="form-group form-check">
                                                         <input type="checkbox" class="form-check-input"
                                                             name="Custom_Listing" value="1" id="custom_Check">
                                                         <label class="form-check-label" for="custom_Check">Custom
                                                             Listing</label>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="form-group Custom-Date">
                                                         <label>Posted Date</label>
                                                         <input type="date" class="form-control"
@@ -3909,11 +4510,313 @@
                                                 </div>
                                             </div>
                                              
-
+                                            <div class="row p-3">
+                                                <div class="col-lg-6 shadow-sm border rounded p-3">
+                                                    {{-- <h5 class="text-center"><b>ORIGIN LOCATION</b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                        style="background: #113771;">
+                                                        <i class="bi bi-hash mr-2"></i> Customer Information
+                                                    </h4>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="form-group">
+                                                               
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8 ">
+                                                            <div class="form-group">
+                                                                <label>Business Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="Type at least 3 characters"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Business Name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Type</label>
+                                                                <select class="form-control" name="">
+                                                                    <option value="" disabled selected>Select Type</option>
+                                                                    <option value="option 1">option 1</option>
+                                                                    <option value="option 2">option 2</option>
+                                                                    <option value="option 3">option 3</option>
+                                                                </select>
+                                                                <div class="invalid-feedback">
+                                                                    Please select a type.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Contact Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Contact name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-lg-6 ">
+                                                            <div class="form-group">
+                                                                <label>Billing Email</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Billing Email.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+    
+                                                        <br>
+                                                        {{-- <h3>Contact</h3> --}}
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Phone Nmber</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Phone Number.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Title</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Billing Email.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Phone</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                     Your phone.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Mobile</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Your Mobile.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder=""
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Email.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 ">
+                                                            <div class="form-group">
+                                                                <label>Address</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="Type at least 3 characters"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your Address.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 ">
+                                                            <div class="form-group">
+                                                                <label>City</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="City"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your City Name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <div class="form-group">
+                                                                <label>State</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="State"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Your State Name.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-2">
+                                                            <div class="form-group">
+                                                                <label>Zip Code</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="" placeholder="Zip Code"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Zip Code.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 ">
+                                                            <div class="form-group">
+                                                                <label>Note For Customer</label>
+                                                                <textarea cols="30" rows="5" name="Vehcile_Desc" placeholder="Write something..." class="form-control"></textarea>
+                                                                <div class="invalid-feedback">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="col-lg-6 shadow-sm border rounded p-3">
+                                                    {{-- <h5 class="text-center"><b>DESTINATION LOCATION</b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                        style="background: #113771;">
+                                                        <i class="bi bi-hash mr-2"></i> Customer Payment
+                                                    </h4>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Total Tariff</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Total Tariff.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Deposite</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Deposite.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
+                                                                <label>Terms</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Terms.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Paid Ammount</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Paid Ammount.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Paid Method</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Paid Method.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Reference Number</label>
+                                                                <input type="text" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Reference Number.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group">
+                                                                <label>Recived Date</label>
+                                                                <input type="date" class="form-control"
+                                                                    name=""
+                                                                    placeholder="Enter User Name"
+                                                                    value=""
+                                                                    autocomplete="off">
+                                                                <div class="invalid-feedback">
+                                                                    Enter Recived Date.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12 ">
+                                                            <div class="form-group">
+                                                                <label>Notes</label>
+                                                                <textarea cols="30" rows="5" name="Vehcile_Desc"  class="form-control"></textarea>
+                                                                <div class="invalid-feedback">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                     
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row p-3">
                                                 <div class="col-lg-6 shadow-sm p-3">
-                                                    <h5  class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b>ORIGIN LOCATION</b></h5>
-
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i> ORIGIN LOCATION
+                                                </h4>
                                                     <div class="row p-3">
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
@@ -4171,8 +5074,10 @@
 
                                                 </div>
                                                 <div class="col-lg-6 shadow-sm p-3">
-                                                    <h5  class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b>DESTINATION LOCATION</b></h5>
-
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i> DESTINATION LOCATION
+                                                </h4>
                                                     <div class="row p-3">
                                                         <div class="col-lg-12">
                                                             <div class="form-group">
@@ -4592,8 +5497,10 @@
 
                                             <div class="row p-3">
                                                 <div class="col-lg-12 shadow-sm p-3">
-                                                    <h5 class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b> Post Freight Load </b></h5>
-
+                                                    {{-- <h5 class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b> Post Freight Load </b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i>  Post Freight Load </h4>
                                                     <div class="dry-van-information">
                                                         <div class="row mb-3">
                                                             <div class="col-lg-4">
@@ -4986,7 +5893,10 @@
 
                                             <div class="row DateParent">
                                                 <div class="col-lg-12 shadow-sm p-3 border">
-                                                    <h5 class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b>VEHICLE PICKUP INFORMATION</b></h5>
+                                                    {{-- <h5 class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b>VEHICLE PICKUP INFORMATION</b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i>Vehicle Pickup Location</h4>
                                                     <div class="row p-3">
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
@@ -5157,8 +6067,10 @@
 
                                             <div class="row p-3">
                                                 <div class="col-lg-12 shadow-sm p-3">
-                                                    <h5 class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b>Carrier / Payment</b></h5>
-
+                                                    {{-- <h5 class="text-white py-2 d-flex justify-content-center" style="background: #113771;"><b>Carrier / Payment</b></h5> --}}
+                                                    <h4 class="text-white py-2 d-flex justify-content-center"
+                                                    style="background: #113771;">
+                                                    <i class="bi bi-hash mr-2"></i> Carrier / Payment</h4>
 
                                                     <div class="row p-3">
 
@@ -5454,7 +6366,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">Specify No. Unit/Pallet</h5>
                 <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">×</span>
+                    <span aria-hidden="true">Ã—</span>
                 </button>
             </div>
             <div id="requested">
@@ -6063,19 +6975,19 @@
                     '<option value="SUV">SUV</option>' +
                     '<option value="Pickup">Pickup</option>' +
                     '<option value="Van">Van</option>' +
-                    '<option disabled="">————————————</option>' +
+                    '<option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>' +
                     '<option value="motorcycle">Motorcycle</option>' +
                     '<option value="atv">ATV</option>' +
-                    '<option disabled="">————————————</option>' +
+                    '<option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>' +
                     '<option value="Mini Van">Mini Van</option>' +
                     '<option value="Cargo Van">Cargo Van</option>' +
                     '<option value="Passenger Van">Passenger Van</option>' +
-                    '<option disabled="">————————————</option>' +
+                    '<option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>' +
                     '<option value="Boat">Boat</option>' +
                     '<option value="Large Yacht">Large Yacht</option>' +
                     '<option value="RVs">RVs</option>' +
                     '<option value="Travel Trailer">Travel Trailer</option>' +
-                    '<option disabled="">————————————</option>' +
+                    '<option disabled="">â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”</option>' +
                     '<option value="other_vehicle">Other Vehicle</option>' +
                     '<option value="other_motorcycle">Other Motorcycle</option>' +
                     '</select>' +
@@ -6854,7 +7766,7 @@
                     true);
                 dropdown.append(function(e) {
                     return jQuery('<span class="multiSelect_choice">' + self.children()
-                        .text() + '  ×</span>').click(function(e) {
+                        .text() + '  Ã—</span>').click(function(e) {
                         var self = jQuery(this);
                         e.stopPropagation();
                         self.remove();
