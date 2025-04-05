@@ -43,6 +43,8 @@
                 </tr>
             </thead>
             <tbody>
+            </tbody>
+            {{-- <tbody>
                 @forelse ($All_Users as $User)
                     <tr>
                         <td>{{ $User->Company_Name }}<br>
@@ -119,7 +121,7 @@
                                             class="dropdown-item"><i
                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i> View Profile</a>
                                     </li>
-                                    {{-- @if (!$User->admin_verify)
+                                    @if (!$User->admin_verify)
                                         <li><a href="{{ route('Verify.User', ['User_ID' => $User->id]) }}"
                                                 class="dropdown-item edit-item-btn"><i
                                                     class="ri-pencil-fill align-bottom me-2 text-muted"></i> Mark
@@ -130,7 +132,7 @@
                                                 class="dropdown-item edit-item-btn"><i
                                                     class="ri-pencil-fill align-bottom me-2 text-muted"></i> Mark
                                                 Un-Verify</a></li>
-                                    @endif --}}
+                                    @endif
                                     @if ($User->admin_suspended)
                                         <li>
                                             <a href="{{ route('Un.Suspend.User', ['User_ID' => $User->id]) }}"
@@ -159,11 +161,11 @@
                     </tr>
                 @empty
                 @endforelse
-            </tbody>
+            </tbody> --}}
         </table>
-        <div class="d-flex justify-content-center mt-3">
+        {{-- <div class="d-flex justify-content-center mt-3">
             {{ $All_Users->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
-        </div>
+        </div> --}}
     </div>
 </div>
 <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -250,6 +252,30 @@
             var UserEmail = $(this).find('.user_email').val();
             console.log(UserEmail);
             $(".userEmail").val(UserEmail);
+        });
+    });
+
+    $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+
+        $('#example').DataTable({
+            processing: true,
+            serverSide: true,
+            order: [[0, 'asc']],
+            searching: true,
+            ajax: {
+                url: "{{ route('get.users.data') }}",
+                type: "GET"
+            },
+            columns: [
+                { data: 'Company_Name', name: 'Company_Name' },
+                { data: 'Company Detail', name: 'Company Detail' },
+                { data: 'Contacts', name: 'Contacts' },
+                { data: 'Cargo_Detail', name: 'Cargo_Detail' },
+                { data: 'actions', name: 'actions', orderable: false, }
+            ]
         });
     });
 </script>

@@ -13,17 +13,102 @@ use Illuminate\Support\Facades\Auth;
 use App\Mail\AuthorizationFormMail;
 use App\Models\Listing\AllUserListing;
 use Livewire\WithPagination;
+use Yajra\DataTables\DataTables;
 
 class AllUsers extends Component
 {
     public function render()
     {
-        $All_Users = AuthorizedUsers::with([
-            'insurance',
-            'certificates'
-        ])->orderBy('id', 'DESC')->paginate(10);
+        return view('livewire.backend.admin.user-profiles.all-users')->layout('layouts.authorized-admin');
+    }
 
-        return view('livewire.backend.admin.user-profiles.all-users', compact('All_Users'))->layout('layouts.authorized-admin');
+    public function getUsersData(Request $request)
+{
+    $searchTerm = $request->input('search.value');
+    $query = AuthorizedUsers::with(['insurance', 'certificates'])->orderBy('id', 'DESC');
+
+    if (!empty($searchTerm)) {
+        $query->where(function($q) use ($searchTerm) {
+            $q->where('Company_Name', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('email', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('Mc_Number', 'LIKE', "%{$searchTerm}%")
+              ->orWhere('Address', 'LIKE', "%{$searchTerm}%")
+            ->orWhereRaw("DATE_FORMAT(created_at, '%M %d, %Y') LIKE ?", ["%{$searchTerm}%"])
+            ->orWhereRaw("DATE_FORMAT(updated_at, '%M %d, %Y') LIKE ?", ["%{$searchTerm}%"]);
+        });
+    }
+    
+    return DataTables::of($query)
+    ->addColumn('Company_Name', function ($User) {
+        return $User->Company_Name . '<br>' . 
+               ($User->is_email_verified 
+                   ? $User->email 
+                   : '<span class="text-danger" title="Email Not Verified!">' . $User->email . '</span>') . 
+               '<br><a href="#" target="_blank">View MC #' . $User->Mc_Number . '</a><br><strong>' . $User->usr_type . '</strong>';
+    })
+    ->addColumn('Company Detail', function ($User) {
+        return "<strong>Address: </strong>{$User->Address}<br>
+                <strong>City: </strong>{$User->Company_City}<br>
+                <strong>State: </strong>{$User->Company_State}<br>
+                <span class='badge ". ($User->admin_suspended ? 'bg-danger' : '') ."'>" . ($User->admin_suspended ? 'Suspended' : '') . "</span>
+                <span class='badge ". (!$User->admin_verify ? 'bg-danger' : '') ."'>" . (!$User->admin_verify ? 'Not Verified!' : '') . "</span>
+                <span class='badge ". (!$User->is_email_verified ? 'bg-danger' : '') ."'>" . (!$User->is_email_verified ? 'Email Not Verified!' : '') . "</span>";
+    })
+    ->addColumn('Contacts', function ($User) {
+        return ($User->Contact_Phone ? "<strong>Phone: </strong>{$User->Contact_Phone}<br>" : '') . 
+               ($User->Local_Phone ? "<strong>Local: </strong>{$User->Local_Phone}<br>" : '') . 
+               ($User->Toll_Free ? "<strong>Toll: </strong>{$User->Toll_Free}<br>" : '') . 
+               ($User->Fax_Phone ? "<strong>Fax: </strong>{$User->Fax_Phone}<br>" : '') . 
+               ($User->Dispatch_Phone ? "<strong>Dispatch: </strong>{$User->Dispatch_Phone}" : '');
+    })
+    ->addColumn('Cargo_Detail', function ($User) {
+        return ($User->insurance->Agent_Name ?? '<strong class="text-danger">Agent Name?</strong>') . "<br>" . 
+               ($User->insurance->Agent_Phone ?? '<strong class="text-danger">Agent Phone?</strong>') . "<br>" . 
+               ($User->insurance->Cargo_Limit ?? '<strong class="text-danger">Cargo Ins Limit?</strong>') . "<br>" . 
+               ($User->insurance->Deductable ?? '<strong class="text-danger">Cargo Deductible?</strong>');
+    })
+    // ->addColumn('Created_Updated', function ($User) {
+    //     return "";
+    // })
+    ->addColumn('actions', function ($User) {
+        return '<strong>Created At: </strong>' . $User->created_at . '<br><strong>Updated At: </strong>' . $User->updated_at . '<br><div class="dropdown d-inline-block">
+                    <button class="btn btn-soft-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Actions
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a href="'.route('Admin.View.Profile', ['User_ID' => $User->id, 'USR_TYPE' => 'User']).'" class="dropdown-item">
+                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i> View Profile
+                            </a>
+                        </li>
+                        '. ($User->admin_suspended ? 
+                            '<li><a href="'.route('Un.Suspend.User', ['User_ID' => $User->id]).'" class="dropdown-item">
+                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Mark Un-Suspend
+                            </a></li>' :
+                            '<li><a href="'.route('Suspend.User', ['User_ID' => $User->id]).'" class="dropdown-item">
+                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Mark Suspend
+                            </a></li>' 
+                        ) .'
+                        <li>
+                            <button class="btn get-history" data-bs-toggle="modal" data-bs-target="#showModal">
+                                <i class="ri-mail-line align-bottom me-2 text-muted"></i> Authorization Form
+                                <input type="hidden" class="user_email" value="'.$User->email.'">
+                            </button>
+                        </li>
+                    </ul>
+                </div>';
+    })
+    ->rawColumns(['Company_Name', 'Company Detail', 'Contacts', 'Cargo_Detail', 'Created_Updated', 'actions'])
+    ->make(true);
+
+
+
+        // $All_Users = AuthorizedUsers::with([
+        //     'insurance',
+        //     'certificates'
+        // ])->orderBy('id', 'DESC')->paginate(10);
+
+        // return view('livewire.backend.admin.user-profiles.all-users', compact('All_Users'))->layout('layouts.authorized-admin');
     }
 
     public function VerifyUser(Request $request): RedirectResponse

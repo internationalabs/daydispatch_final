@@ -290,6 +290,7 @@ Route::group(['middleware' => 'AdminAuthorized', 'prefix' => 'Admin'], static fu
 
     //    ==================== Users Views For Admin ============
     Route::get('/All-Users-List', AllUsers::class, )->name('All.Users');
+    Route::get('/All-Users-Fetch', [AllUsers::class, 'getUsersData'])->name('get.users.data');
     Route::get('/Verify-User/{User_ID}', [AllUsers::class, 'VerifyUser'])->name('Verify.User');
     Route::get('/Un-Verify-User/{User_ID}', [AllUsers::class, 'un_VerifyUser'])->name('Un.Verify.User');
     Route::get('/Suspend-User/{User_ID}', [AllUsers::class, 'SuspendUser'])->name('Suspend.User');
